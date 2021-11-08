@@ -10,7 +10,7 @@
                 
             </div>
             <h4 class="page-title">會員管理 &nbsp; &nbsp;
-                  <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/users/add') }}'">會員建檔</button>
+                  <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/user') }}'">會員建檔</button>
             </h4>
         </div>
     </div>
@@ -52,45 +52,34 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Email</th>
+                                <th>姓名</th>
                                 <th>備註</th>
+                                <th>狀態</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach( $users as $suser )
+                            @foreach( $users as $user )
                             <tr>
                                 <td>
-                                  <a href="{{ url('mge/user/' . $suser->id )}}" class="font-weight-bold">
-                                    {{ $suser->s_tnum }}
+                                  <a href="{{ url('mge/user/' . $user->id )}}" class="font-weight-bold">
+                                    {{ $user->email }}
                                   </a>
                                 </td>
                                 <td>
-                                  @if( $suser->s_branch == '1' )
-                                  三重店
-                                  @endif
-
-                                  @if( $suser->s_branch == '2' )
-                                  台北店
-                                  @endif
-                                </td>
-                                <td>
-                                  <a href="{{ url("mge/user/" . $suser->id )}}" class="font-weight-bold">
-                                    {{ $suser->s_name }}
+                                  <a href="{{ url("mge/user/" . $user->id )}}" class="font-weight-bold">
+                                    {{ $user->name }}
                                   </a>
                                 </td>
                                 <td>
-                                  @if( $suser->s_gender == "1")男 @else 女 @endif
+                                  {{ $user->notice }}
                                 </td>
                                 <td>
-                                  {{ $suser->s_cellphone }}
-                                </td>
-                                <td>
-                                    @if( !is_null($suser->getCoach) )
-                                    {{ $suser->getCoach->c_tnum }} {{ $suser->getCoach->c_name }}
+                                    @if( $user->status == '0')
+                                    啟用
+                                    @else
+                                    停用
                                     @endif
-                                </td>
-                                <td>
-                                  {{ $suser->s_notice }}
-                                </td>
+                                  </td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -6,6 +6,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\SingalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +53,7 @@ Route::group(['prefix' => 'mge'], function() {
     //[管理][會員]
     Route::get('users', [UserController::class, 'index']);
     Route::post('users', [UserController::class, 'store']);
-    Route::get('users/edit/{id}/{storeid}', [UserController::class, 'edit']);
+    Route::get('user/{id?}', [UserController::class, 'edit']);
     Route::post('users/edit/{id}', [UserController::class, 'update']);
     Route::get('users/delete/{id}', [ManagersUserControllerController::class, 'destroy']);
 
@@ -67,5 +68,12 @@ Route::group(['prefix' => 'mge'], function() {
     //[管理][系統設定]
     Route::get('settings', [SettingController::class, 'edit']);
     Route::post('settings', [SettingController::class, 'update']);
+
+});
+
+Route::group(['prefix' => 'v1/api'], function() {
+    
+    //[API][接收第三方訊號]
+    Route::get('signals', [SignalController::class, 'signalReceive']);
 
 });

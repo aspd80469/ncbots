@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::group(['prefix' => 'v1/api'], function() {
+    
+//     //[API][接收第三方訊號]
+//     Route::get('singnals', [SingalController::class, 'singalReceive']);
+
+// });
+

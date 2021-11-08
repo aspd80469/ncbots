@@ -239,6 +239,14 @@
                         </li>
 
                         <li>
+                            <a href="{{ url('mge/') }}">
+                                <i class="fas fa-broom"></i>
+                                <span> 手動補單 </span>
+                            </a>
+
+                        </li>
+
+                        <li>
                             <a href="{{ url('mge/signals') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                                 <span> 指標訊號 </span>
@@ -322,18 +330,12 @@
                             @foreach (['danger', 'warning', 'success', 'info'] as $msg)
                             @if(Session::has('alert-' . $msg))
                             <div class="alert alert-{{ $msg }} alert-dismissible bg-{{ $msg }} text-white border-0 fade show" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
                                 {{ Session::get('alert-' . $msg) }}
                             </div>
                             @endif
                             @endforeach
                             @if( $errors->any() && $errors->first() != "")
                             <div class="alert alert-danger alert-dismissible bg-info text-white border-0 fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
                             {!! $errors->first() !!}
                             </div>
                             @endif

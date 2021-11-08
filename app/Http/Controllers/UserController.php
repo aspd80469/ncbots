@@ -62,13 +62,13 @@ class UserController extends Controller
 
     }
 
-    public function edit($id, $storeid)
+    public function edit($id = 0)
     {
 
         //[編輯]
         $user = ( $id == 0 ) ? ( null ) : ( User::findOrFail($id) );
 
-        return view('mge_user_single',[
+        return view('mge/mge_user_single',[
             'user'=> $user ,
         ]);
 
