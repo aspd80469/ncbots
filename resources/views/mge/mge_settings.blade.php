@@ -63,6 +63,60 @@
                             </div>
                         </div>
 
+                        
+                        <div class="form-group row mb-3">
+                            <label for="display" class="col-3 col-form-label">啟用TRC20付款</label>
+                            <div class="col-9">
+                                
+                                <select id="allowUserPlanPayByTRC20" name="allowUserPlanPayByTRC20" class="form-control">
+                                    <option value="Y" @if( $allowUserPlanPayByTRC20 == "Y" ) selected @endif>是</option>
+                                    <option value="N" @if( $allowUserPlanPayByTRC20 == "N" ) selected @endif>否</option>
+                                </select>
+                                                            
+                                @error('allowUserPlanPayByTRC20')
+                                <span role="alert" style="color: red;">
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="display" class="col-3 col-form-label">啟用ERC20付款</label>
+                            <div class="col-9">
+                                
+                                <select id="allowUserPlanPayByERC20" name="allowUserPlanPayByERC20" class="form-control">
+                                    <option value="Y" @if( $allowUserPlanPayByERC20 == "Y" ) selected @endif>是</option>
+                                    <option value="N" @if( $allowUserPlanPayByERC20 == "N" ) selected @endif>否</option>
+                                </select>
+                                                            
+                                @error('allowUserPlanPayByERC20')
+                                <span role="alert" style="color: red;">
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row mb-3">
+                            <label for="display" class="col-3 col-form-label">系統主錢包地址(TRC20)</label>
+                            <div class="col-9">
+                            
+                                <input type="text" id="sysMainWalletTRC20" name="sysMainWalletTRC20" class="form-control" placeholder="請輸入TRC20錢包地址" value="@if( !is_null($sysMainWalletTRC20) ){{ $sysMainWalletTRC20 }}@endif">
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="display" class="col-3 col-form-label">系統主錢包地址(ERC20)</label>
+                            <div class="col-9">
+                            
+                                <input type="text" id="sysMainWalletERC20" name="sysMainWalletERC20" class="form-control" placeholder="請輸入ERC20錢包地址" value="@if( !is_null($sysMainWalletERC20) ){{ $sysMainWalletERC20 }}@endif">
+                                
+                            </div>
+                        </div>
+
                         <div class="form-group mb-0 justify-content-end row">
                             <div class="col-9">
                                 <button type="submit" class="btn btn-blue waves-effect waves-light" >儲存</button>

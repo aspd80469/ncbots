@@ -12,14 +12,14 @@
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
 		<!-- App css -->
-		<link href="{{ asset('assets/css/config/default/bootstrap.min.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
-		<link href="{{ asset('assets/css/config/default/app.min.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/bootstrap.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/app.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
 
-		<link href="{{ asset('assets/css/config/default/bootstrap-dark.min.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
-		<link href="{{ asset('assets/css/config/default/app-dark.min.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/bootstrap-dark.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/app-dark.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
 
 		<!-- icons -->
-		<link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
 
     </head>
 
@@ -78,12 +78,7 @@
             <!-- Auth fluid right content -->
             <div class="auth-fluid-right text-center">
                 <div class="auth-user-testimonial">
-                    <h2 class="mb-3 text-white">I love the color!</h2>
-                    <p class="lead"><i class="mdi mdi-format-quote-open"></i> I've been using your theme from the previous developer for our web app, once I knew new version is out, I immediately bought with no hesitation. Great themes, good documentation with lots of customization available and sample app that really fit our need. <i class="mdi mdi-format-quote-close"></i>
-                    </p>
-                    <h5 class="text-white">
-                        - Fadlisaad (Ubold Admin User)
-                    </h5>
+                    <a href='https://www.freepik.com/vectors/abstract'>Abstract vector created by starline</a>
                 </div> <!-- end auth-user-testimonial-->
             </div>
             <!-- end Auth fluid right content -->
@@ -91,10 +86,10 @@
         <!-- end auth-fluid-->
 
         <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+        <script src="{{ asset('assets/js/vendor.js') }}"></script>
 
         <!-- App js -->
-        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
         
     </body>
 </html>

@@ -12,14 +12,14 @@
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
 		<!-- App css -->
-		<link href="{{ asset('assets/css/config/default/bootstrap.min.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
-		<link href="{{ asset('assets/css/config/default/app.min.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/bootstrap.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/app.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
 
-		<link href="{{ asset('assets/css/config/default/bootstrap-dark.min.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
-		<link href="{{ asset('assets/css/config/default/app-dark.min.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/bootstrap-dark.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
+		<link href="{{ asset('assets/css/config/default/app-dark.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
 
 		<!-- icons -->
-		<link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
 
     </head>
 
@@ -52,16 +52,16 @@
                         <h4 class="mt-0">登入</h4>
 
                         <!-- form -->
-                        <form action="#">
+                        <form method="POST" action="{{ route('login') }}">
                             <div class="mb-3">
                                 <label for="emailaddress" class="form-label">Email</label>
-                                <input class="form-control" type="email" id="emailaddress" required="" placeholder="Enter your email">
+                                <input class="form-control" type="email" id="emailaddress" required="" placeholder="請輸入email" required autofocus>
                             </div>
                             <div class="mb-3">
                                 <a href="{{ route('password.request') }}" class="text-muted float-end"><small>忘記密碼?</small></a>
                                 <label for="password" class="form-label">密碼</label>
                                 <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                                    <input type="password" id="password" class="form-control" placeholder="請輸入密碼" autocomplete="current-password">
                                     <div class="input-group-text" data-password="false">
                                         <span class="password-eye"></span>
                                     </div>
@@ -93,10 +93,7 @@
             <!-- Auth fluid right content -->
             <div class="auth-fluid-right text-center">
                 <div class="auth-user-testimonial">
-
-                    <h5 class="text-white">
-                        - Fadlisaad (Ubold Admin User)
-                    </h5>
+                    <a href='https://www.freepik.com/vectors/abstract'>Abstract vector created by starline</a>
                 </div> <!-- end auth-user-testimonial-->
             </div>
             <!-- end Auth fluid right content -->
@@ -104,10 +101,10 @@
         <!-- end auth-fluid-->
 
         <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+        <script src="{{ asset('assets/js/vendor.js') }}"></script>
 
         <!-- App js -->
-        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
         
     </body>
 </html>

@@ -10,7 +10,7 @@
             <div class="page-title">
                 
             </div>
-            <h4 class="page-title">購買會員方案紀錄 &nbsp; &nbsp;
+            <h4 class="page-title">系統紀錄 &nbsp; &nbsp;
             </h4>
         </div>
     </div>
@@ -27,34 +27,33 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>#</th>
-								<th>方案</th>
-                                <th>起訖日</th>
-								<th>實付金額</th>
-								<th>付款日期</th>
-								<th>類型</th>
-								<th>TxID</th>
+								<th>時間</th>
+                                <th>類型</th>
+                                <th>動作</th>
+								<th>內容</th>
+                                <th>使用者</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach( $userPlanRecords as $userPlanRecord )
+                            @foreach( $sysLogs as $sysLog )
                             <tr>
                                 <td>
-                                  {{ $userPlanRecord->id }}
+                                  {{ $sysLog->id }}
                                 </td>
                                 <td>
-									{{ $userPlanRecord->st_date }} - {{ $userPlanRecord->ed_date }}
+									{{ $sysLog->created_at }}
                                 </td>
 								<td>
-									{{ $userPlanRecord->paidAmount }}
+									{{ $sysLog->type }}
+                                </td>
+                                <td>
+									{{ $sysLog->operation }}
                                 </td>
 								<td>
-									{{ $userPlanRecord->paidDay }}
+									{{ $sysLog->msg }}
                                 </td>
-								<td>
-									{{ $userPlanRecord->type }}
-                                </td>
-								<td>
-									{{ $userPlanRecord->TxID }}
+                                <td>
+									{{ $sysLog->userid }}
                                 </td>
                             </tr>
                             @endforeach
@@ -63,7 +62,7 @@
                 </div>
 
                 <div class="pagination pagination-rounded justify-content-end my-2">
-                    {{ $userPlanRecords->appends(Request::except('page'))->links() }}
+                    {{ $sysLogs->appends(Request::except('page'))->links() }}
                 </div>
 
                 <style>
