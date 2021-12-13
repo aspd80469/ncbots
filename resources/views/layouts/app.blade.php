@@ -239,7 +239,7 @@
                         </li>
 
                         <li>
-                            <a href="{{ url('mge/') }}">
+                            <a href="{{ url('mge/manualOrders') }}">
                                 <i class="fas fa-broom"></i>
                                 <span> 手動補單 </span>
                             </a>
@@ -275,7 +275,15 @@
                                     </li>
 
                                     <li>
-                                        <a href="{{ url('mge/sysSignals') }}">訊號紀錄</a>
+                                        <a href="{{ url('mge/riskNotice') }}">風險聲明</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('mge/sysSignals') }}">訊號Token</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{ url('mge/sysSignalLogs') }}">訊號紀錄</a>
                                     </li>
 
                                     <li>

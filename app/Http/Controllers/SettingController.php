@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use Illuminate\Support\Facades\Redirect;
@@ -21,44 +22,43 @@ class SettingController extends Controller
         $this->settingService = $settingService;
     }
 
+
+    //[管理][系統參數]
+    public function index()
+    {
+
+        //[主頁]
+
+        //搜尋條件
+        $settings =  Setting::orderBy('id', 'ASC')->paginate(20);
+
+        return view('mge/mge_settings', [
+            'settings' => $settings,
+        ]);
+    }
+
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function edit()
+    public function edit($id)
     {
-        //設定資料
+        //[編輯]
+        $setting = ($id == 0) ? (null) : (Setting::findOrFail($id));
 
-        //是否允許新會員註冊
-        $allowRegister  = $this->settingService->getSetting('allowRegister');
-
-        //是否註冊推薦碼必填
-        $requiredRefCode  = $this->settingService->getSetting('requiredRefCode');
-
-        if( is_null($allowRegister) ){
-            $this->settingService->createSetting('allowRegister' , 'N');
-        }
-
-        if( is_null($requiredRefCode) ){
-            $this->settingService->createSetting('requiredRefCode' , 'N');
-        }
-        
-
-        return view('mge/mge_settings', [
-            'allowRegister' => $allowRegister,
-            'requiredRefCode' => $requiredRefCode,
+        return view('mge/mge_settings_single', [
+            'setting' => $setting,
         ]);
 
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
 
-        //[更新]
-        $validator = Validator::make($request->all(), [
-            'allowRegister' => 'required|string|max:1',
-            'requiredRefCode' => 'required|string|max:1',
+         //[更新]
+         $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:setting,name,' . $id,
         ]);
 
         if ($validator->fails()) {
@@ -67,13 +67,30 @@ class SettingController extends Controller
                 ->withInput();
         }
 
-        //設定資料
-        $this->settingService->updateSetting('allowRegister' , htmlspecialchars($request->input('allowRegister'), ENT_QUOTES));
-        $this->settingService->updateSetting('requiredRefCode' , htmlspecialchars($request->input('requiredRefCode'), ENT_QUOTES));
-
-        Session::flash('alert-success', '設定更新成功');
-
-        return redirect('mge/settings');
+        $setting = Setting::findOrFail($id);
+        $setting->name = htmlspecialchars($request->input('name'), ENT_QUOTES);
+        $setting->value = htmlspecialchars($request->input('value'), ENT_QUOTES);
+        $setting->sdesc = htmlspecialchars($request->input('sdesc'), ENT_QUOTES);
+        
+        if ($setting->save()) {
+            Session::flash('alert-success', '參數更新成功');
+        } else {
+            Session::flash('alert-dangeer', '參數更新失敗');
+        }
+        return redirect('/mge/settings');
     }
+
+    public function riskNotice_edit()
+    {
+
+        //[編輯]
+        $setting = ($id == 0) ? (null) : (Setting::findOrFail($id));
+
+        return view('mge/mge_riskNotice_single', [
+            'setting' => $setting,
+        ]);
+
+    }
+    
 
 }

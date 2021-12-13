@@ -6,12 +6,12 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
-            <div class="page-title-right">
-
+            <div class="page-title">
+                
             </div>
-            <h4 class="page-title">
-                參數設定
-                &nbsp;&nbsp;&nbsp;
+            <h4 class="page-title">參數設定 &nbsp; &nbsp;
+                
+                <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/settings/add') }}'"><i class="fas fa-plus"></i> 新增參數</button>
             </h4>
         </div>
     </div>
@@ -19,62 +19,55 @@
 <!-- end page title --> 
 
 <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
 
-        <div class="col-lg-9">
-            <div class="card">
-                <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>參數</th>
+                                <th>描述</th>
+                                <th>設定值</th>
+                                <th>管理</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach( $settings as $setting )
+                            <tr>
+                                <td>
+                                  {{ $setting->name }}
+                                </td>
+                                <td>
+                                    {{ $setting->sdesc }}
+                                  </td>
+                                <td>
+                                    {{ $setting->value }}
+                                  </td>
+                                <td>
+                                    <button type="submit" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url("mge/settings/" . $setting->id )}}'">編輯</button>
+                                  </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-                    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="
-                    {{ URL::to('mge/settings/')}}
-                    ">
-                    @csrf
+                <div class="pagination pagination-rounded justify-content-end my-2">
+                    {{ $settings->appends(Request::except('page'))->links() }}
+                </div>
 
-                        <div class="form-group row mb-3">
-                            <label for="display" class="col-3 col-form-label">啟用會員註冊<span class="text-danger">*</span></label>
-                            <div class="col-9">
-                                
-                                <select id="allowRegister" name="allowRegister" class="form-control">
-                                    <option value="Y" @if( $allowRegister == "Y" ) selected @endif>是</option>
-                                    <option value="N" @if( $allowRegister == "N" ) selected @endif>否</option>
-                                </select>
-                                                            
-                                @error('allowRegister')
-                                <span role="alert" style="color: red;">
-                                    {{ $message }}
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-3">
-                            <label for="display" class="col-3 col-form-label">會員註冊推薦碼必填<span class="text-danger">*</span></label>
-                            <div class="col-9">
-                                
-                                <select id="requiredRefCode" name="requiredRefCode" class="form-control">
-                                    <option value="Y" @if( $requiredRefCode == "Y" ) selected @endif>是</option>
-                                    <option value="N" @if( $requiredRefCode == "N" ) selected @endif>否</option>
-                                </select>
-                                                            
-                                @error('requiredRefCode')
-                                <span role="alert" style="color: red;">
-                                    {{ $message }}
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-0 justify-content-end row">
-                            <div class="col-9">
-                                <button type="submit" class="btn btn-blue waves-effect waves-light" >儲存</button>
-                            </div>
-                        </div>
-                    </form>
-
-                </div>  <!-- end card-body -->
-            </div>  <!-- end card -->
-        </div>  <!-- end col -->
-
-    </div>
+                <style>
+                    nav {
+                        overflow: scroll !important;
+                    }
+                </style>
+                
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
 <!-- end row -->
-
+ 
 @endsection

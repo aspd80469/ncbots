@@ -10,7 +10,7 @@
                 
             </div>
             <h4 class="page-title">管理帳號 &nbsp; &nbsp;
-                  <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/managers/add') }}'">建立帳號</button>
+                  <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/managers/add') }}'"><i class="fas fa-plus"></i> 新增帳號</button>
             </h4>
         </div>
     </div>

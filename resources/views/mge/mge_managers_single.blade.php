@@ -10,7 +10,7 @@
             </div>
             <h4 class="page-title">
                 @if( is_null($manager) )
-                建立管理帳號
+                新增管理帳號
                 @else
                 編輯管理帳號
                 @endif
@@ -43,7 +43,7 @@
 
                         <div class="mb-3">
                             <label for="password" class="form-label">密碼<span class="text-danger">*</span></label>
-                            <input type="text" id="password" name="password" class="form-control" placeholder="請輸入密碼@if( !is_null($manager) )，無變更請留空@else 最少6個字元  @endif" @if( is_null($manager) )  required minlength="6" @endif>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="請輸入密碼@if( !is_null($manager) )，無變更請留空@else 最少6個字元  @endif" @if( is_null($manager) )  required minlength="6" @endif>
                         </div>
 
                         <div class="form-group mb-3">
