@@ -181,11 +181,11 @@ class DaemonPrice extends Command
     {
         //定義
         $allowSymbolLists = explode(";", $botsStgy->allowSymbol);
-        $maxDCAfreq = $botsStgy->maxDCAqty;//最大攤平次數，每次攤平使用多一倍成本，故單幣種投資金額會提高很大，超過則顯示該幣種警告
+        $maxDCAfreq = $botsStgy->maxDCAqty;//最大攤平次數，每次攤平使用多一倍成本，故單幣種投資金額會提高很多，超過則顯示該幣種警告
         $fixedBuyAmt = $botsStgy->fixedBuyAmt;
         //機器人狀態儲存
 
-        //儲存目前 0已購入幣種 1平均成本 2總數量 3上次買入是(sell or buy) 4已經DCA次數 5時框
+        //儲存目前 token enterPrice 
         $stat_holdCoins = unserialize($myBot->field_1);
 
         //儲存目前 0追蹤中買入幣種 1最低價格 2反彈價格 3時框
@@ -268,6 +268,7 @@ class DaemonPrice extends Command
             $isHold = false;
             $token = '';
             $avgPrice = '';
+            $enterSellPrice = '';
             $reSellPrice = '';
             $holdQty = '';
             $direction = '';
@@ -286,6 +287,7 @@ class DaemonPrice extends Command
                         $isHold = true;
                         $token = $stat_holdCoin["token"];
                         $avgPrice = $stat_holdCoin["avgPrice"];
+                        $enterSellPrice = $stat_holdCoin["enterSellPrice"];
                         $reSellPrice = $stat_holdCoin["reSellPrice"];
                         $holdQty = $stat_holdCoin["qty"];
                         $direction = $stat_holdCoin["direction"];
@@ -301,16 +303,17 @@ class DaemonPrice extends Command
             if( $isHold == false && $sysSignalLog->direction == "buy" ){
 
                 echo "  執行策略-1.未持有且買入訊號，則買入\n";
+                $symbolPrice = SymbolPrice::where('exchange', 'binance')->where('symbol', $sysSignalLog->token)->first();
                 $this->binanceBuySellLog($myBot , "buy" , $fixedBuyQty  , $sysSignalLog->token , $sysSignalLog->timeFrame , true);//呼叫實際買入或賣出
                 //更新持有清單 儲存目前 0已購入幣種 1平均成本 2總數量 3上次買入是(sell or buy) 4已經DCA次數 5時框
                 $coinHold = array( "token" => $sysSignalLog->token  , 
-                                    "avgPrice" => $sysSignalLog->price , 
-                                    "enterSellPrice" => $sysSignalLog->price , 
-                                    "reSellPrice" => $sysSignalLog->price * 1.02 , 
+                                    "avgPrice" => $symbolPrice->price , 
+                                    "enterSellPrice" => $symbolPrice->price , 
+                                    "reSellPrice" => $symbolPrice->price * 1.02 , 
                                     "qty" => $fixedBuyQty , 
                                     "direction" => 'buy' ,
                                     "DCA" => 0 ,
-                                    "timeFrame" => $sysSignalLog->timeFrame 
+                                    "timeFrame" => $sysSignalLog->timeFrame
                                 );
                 array_push($stat_holdCoins, $coinHold);
 
@@ -324,11 +327,13 @@ class DaemonPrice extends Command
 
                 echo "  執行策略-2.未持有且賣出訊號，則追蹤買入，條件反彈價格8%，如已高於開始追蹤時價格則停止直接停止追價並移出\n";
 
+                $symbolPrice = SymbolPrice::where('exchange', 'binance')->where('symbol', $sysSignalLog->token)->first();
                 $coin = array( "token" => $sysSignalLog->token  , 
                                 "enterPrice" => $sysSignalLog->price , 
-                                "price" => $sysSignalLog->price , 
-                                "reBuyPrice" => $sysSignalLog->price * 1.08 , 
-                                "timeFrame" => $sysSignalLog->timeFrame 
+                                "price" => $$symbolPrice->price , 
+                                "reBuyPrice" => $sysSignalLog->price * 1.08 ,
+                                "timeFrame" => $sysSignalLog->timeFrame,
+                                "isSellTraceBuy" => "true"
                                 );
 
                 array_push($stat_tracebuys, $coin);
@@ -376,9 +381,9 @@ class DaemonPrice extends Command
                 echo "    目前現貨價格：" . $symbolPrice->price ."，機器人平均成本價格：" . $avgPrice . "\n";
 
                 //如果價格已超過固定獲利1%或以上則賣出
-                if($isHold && $symbolPrice->price > $avgPrice * 1.01){
+                if($isHold && $symbolPrice->price >= $avgPrice * 1.01){
 
-                    echo "    已達固定獲利1%或以上，目前現貨價格：" . $symbolPrice->price ."，平均成本：" . $avgPrice  . "，獲利1%價格：" . $avgPrice * 1.01 . "，執行賣出\n";
+                    echo "    獲利1%或以上，目前現貨價格：" . $symbolPrice->price ."，平均成本：" . $avgPrice  . "，獲利1%價格：" . $avgPrice * 1.01 . "，執行賣出\n";
                     $this->binanceBuySellLog($myBot , "sell" , $holdQty , $sysSignalLog->token , $symbolPrice->timeFrame , false);//呼叫實際買入或賣出
 
                     //找到該幣種並移除持有
@@ -393,27 +398,28 @@ class DaemonPrice extends Command
                 }else{
 
                     //把幣種移入追蹤買入，反彈買入價格為8%
-                    echo "    未達固定獲利1%或以上，幣種：" . $sysSignalLog->token ."，進入追蹤買入攤平模式(DCA)\n";
+                    echo "    未達獲利1%或以上，幣種：" . $sysSignalLog->token ."，進入追蹤買入攤平模式(DCA)\n";
 
                     $coin = array( "token" => $sysSignalLog->token  , 
-                                "enterPrice" => $symbolPrice->price , 
+                                "enterPrice" => $sysSignalLog->price , 
                                 "price" => $symbolPrice->price , 
                                 "reBuyPrice" => $sysSignalLog->price * 1.08 , 
-                                "timeFrame" => $sysSignalLog->timeFrame 
+                                "timeFrame" => $sysSignalLog->timeFrame ,
+                                "isSellTraceBuy" => "false"
                                 );
 
                     array_push($stat_tracebuys, $coin);
 
 
                     //持有幣種增加註記，進入DCA
-                    foreach($stat_holdCoins as $stat_holdCoin => $v){
-                        if( $v["token"] == $sysSignalLog->token && 
-                            $v["timeFrame"] == $sysSignalLog->timeFrame 
-                        ){
-                            $stat_holdCoins[$stat_holdCoin]["DCA"] += 1;//註記被加入了攤平計畫
-                            break;
-                        }
-                    }
+                    // foreach($stat_holdCoins as $stat_holdCoin => $v){
+                    //     if( $v["token"] == $sysSignalLog->token && 
+                    //         $v["timeFrame"] == $sysSignalLog->timeFrame 
+                    //     ){
+                    //         $stat_holdCoins[$stat_holdCoin]["DCA"] += 1;//註記被加入了攤平計畫
+                    //         break;
+                    //     }
+                    // }
 
                 }
 
@@ -440,7 +446,7 @@ class DaemonPrice extends Command
             $this->JRB_DCA_SL_STRATEGY_TRACE_BUY($myBot , $stat_holdCoins , $stat_tracebuys ,  $maxDCAfreq , $fixedBuyAmt);
         }
 
-        //如果追蹤買賣出幣種不是空的，才執行Trace sell
+        //只要機器人持有幣種就執行Trace sell
         if( !is_null($stat_holdCoins) && count($stat_holdCoins) > 0 ){
             $this->JRB_DCA_SL_STRATEGY_TRACE_SELL( $myBot , $stat_holdCoins );
         }
@@ -470,7 +476,7 @@ class DaemonPrice extends Command
                     $this->sysLog($myBot , "myBot" , "DCA" , "幣種 " . $bcv["token"] . " 進入DCA已達最大買入次數，請確認" );
 
                     //移除追蹤該幣種
-                    unset($stat_holdCoins[$stat_holdCoin]);
+                    unset($stat_tracebuys[$stat_tracebuy]);
                     $isDCAMax = true;//已到達最大買入次數就直接返回不再追價
                     break;
                 }
@@ -494,18 +500,32 @@ class DaemonPrice extends Command
                 $orgreBuyPrice = $stv["reBuyPrice"];
                 $stat_tracebuys[$stat_tracebuy]["price"] = $symbolPrice->price;
                 $stat_tracebuys[$stat_tracebuy]["reBuyPrice"] = $symbolPrice->price * 1.08;
-                echo "  執行-更新追蹤買入最低價：" . $symbolPrice->price . "<" . $orgPrice . "，新追蹤價格：" . $stv["price"] . "，新反彈買入價：" . $stv["reBuyPrice"] . "\n";
+                echo "  執行-更新追蹤買入最低價：" . $symbolPrice->price . "<" . $orgPrice . "\n";
+                echo "       原追蹤買入最低價：" . $orgPrice . "，反彈買入價：" . $orgreBuyPrice . "\n";
+                echo "       新追蹤買入最低價：" . $stv["price"] . "，反彈買入價：" . $stv["reBuyPrice"] . "\n";
                 
+            }
+            
+             //已經比進入價格還要高，移除追蹤
+            if( $symbolPrice->price > $stat_tracebuys[$stat_tracebuy]["enterPrice"] ){
+
+                echo "  執行-已於訊號進入價格，移除追蹤買入：" . $symbolPrice->price . ">" . $stat_tracebuys[$stat_tracebuy]["enterPrice"];
+                unset($stat_tracebuys[$stat_tracebuy]);
+
             }
 
             //如果現在比追蹤價格還高且已經超過反彈價格，超過則發動買入，但必須小於enterPirce
-            if( ( $symbolPrice->price <= $stv["enterPrice"]) && ($symbolPrice->price > $stv["price"]) ){
-                echo "  執行-現在比追蹤價格還高，追蹤價格還高且已經超過反彈價格，但必須小於enterPirce，超過則發動買入：" . $symbolPrice->price . ">" . $stv["price"] . "\n";
+            if( ( $symbolPrice->price <= $stv["enterPrice"]) && ($symbolPrice->price > $stv["reBuyPrice"]) ){
+                echo "  執行-現在比追蹤價格還高，追蹤價格還高且已經超過反彈價格，但必須小於enterPirce，超過則發動買入：" . $symbolPrice->price . ">" . $stv["reBuyPrice"] . "\n";
 
                 //檢查目前是否已持有，已持有則更新，未持有則加入該幣種
                 $isHold = false;
+                $needBuyQty = 0;
+                $holdQty = 0;
                 foreach($stat_holdCoins as $stat_holdCoin){
                     if($stat_holdCoin["token"] == $stv["token"] ){//如果有在已持有清單
+
+                        $holdQty = $stat_holdCoin["qty"];
                         $isHold = true;
                         break;
                     }
@@ -522,7 +542,10 @@ class DaemonPrice extends Command
                             $stat_holdCoins[$stat_holdCoin]["qty"] += $vvv["qty"];//買入目前持有同樣的數量f
                             $stat_holdCoins[$stat_holdCoin]["direction"] = 'buy';
                             $stat_holdCoins[$stat_holdCoin]["DCA"] += 1;//DCA
-                            $needBuyQty = $vvv["qty"];
+
+                            echo "-----------------------------" . "\n";
+                            echo print_r($stat_holdCoins) . "\n";
+                            echo "-----------------------------" . "\n";
                         }
                     }
 
@@ -551,7 +574,7 @@ class DaemonPrice extends Command
                     $isFirstBuy = true;
                     $needBuyQty = round($fixedBuyAmt / $symbolPrice->price, 6);
                 }else{
-                    $needBuyQty = round( $stv["qty"] , 6);
+                    $needBuyQty = round( $holdQty , 6);
                 }
 
                 $isBuy = true;
@@ -568,6 +591,7 @@ class DaemonPrice extends Command
 
         }
 
+        //移出追蹤買入幣種
         foreach($stat_tracebuys as $stat_tracebuy => $v ){
             foreach( $coinNeedRemoveLists as $coinNeedRemoveList ){
                 
@@ -580,20 +604,19 @@ class DaemonPrice extends Command
                         print_r($coinNeedRemoveList);
                         echo "---coinNeedRemoveList---\n";
 
-                    unset($stat_tracebuys[$stat_tracebuy]);
+                        unset($stat_tracebuys[$stat_tracebuy]);
                 }
 
             }
         }
 
-        echo '---追蹤買入前檢視stat_tracebuys---\n';
-        print_r($stat_tracebuys);
-        echo '---------------------------------\n';
+
 
         //已處理完所有新訊號，寫入資料庫
-        $myBot->field_1 = serialize($stat_holdCoins);//儲存目前 0已購入幣種 1平均成本 2總數量 3上次買入是(sell or buy) 4已經DCA次數
-        $myBot->field_2 = serialize($stat_tracebuys);//儲存目前 追蹤中買入幣種 最低價格 反彈價格
-        $myBot->save();
+        $myBot_upd = MyBot::find( $myBot->id );
+        $myBot_upd->field_1 = serialize($stat_holdCoins);//儲存目前 0已購入幣種 1平均成本 2總數量 3上次買入是(sell or buy) 4已經DCA次數
+        $myBot_upd->field_2 = serialize($stat_tracebuys);//儲存目前 追蹤中買入幣種 最低價格 反彈價格
+        $myBot_upd->save();
 
         return true;
 
