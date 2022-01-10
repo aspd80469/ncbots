@@ -50,8 +50,7 @@ class DaemonPrice extends Command
                 //此處必須設定對應策略執行Function，否則會無法執行
                 if( $myBot->usedStgy == "1" ){
                     echo "\n\n" . "#" . $myBot->id . "機器人執行" . "JRB_DCA_SL_STRATEGY 策略" . "\n\n";
-                    $botsStgy = BotsStgy::find(1);
-                    $this->JRB_DCA_SL_STRATEGY($myBot , $botsStgy);
+                    $this->JRB_DCA_SL_STRATEGY($myBot);
                 }else{
 
                     //沒有找到對應策略，暫停機器人
@@ -177,22 +176,15 @@ class DaemonPrice extends Command
 
     ////////////////////////////////////////////////////////////////////////////////////////.
     //JRB攤平止損趨勢策略
-    public function JRB_DCA_SL_STRATEGY( $myBot , $botsStgy )
+    public function JRB_DCA_SL_STRATEGY( $myBot )
     {
-        //定義
+        //定義 機器人狀態
+        $botsStgy = BotsStgy::find(1);
         $allowSymbolLists = explode(";", $botsStgy->allowSymbol);
         $maxDCAfreq = $botsStgy->maxDCAqty;//最大攤平次數，每次攤平使用多一倍成本，故單幣種投資金額會提高很多，超過則顯示該幣種警告
         $fixedBuyAmt = $botsStgy->fixedBuyAmt;
-        //機器人狀態儲存
-
-        //儲存目前 token enterPrice 
         $stat_holdCoins = unserialize($myBot->field_1);
-
-        //儲存目前 0追蹤中買入幣種 1最低價格 2反彈價格 3時框
         $stat_tracebuys = unserialize($myBot->field_2);
-
-        //儲存目前 0追蹤中賣出幣種 1最高價格 2反彈價格 3時框
-        //$stat_tracesells = unserialize($myBot->field_3);
 
         //最後訊號處理的編號，避免處理到已收到的訊號，一種策略只能追隨一種最後處理訊號狀態
         $stat_signalNum = $myBot->field_4;
@@ -209,12 +201,6 @@ class DaemonPrice extends Command
             $this->sysLog($myBot , "myBot" , "ERR" , "異常-stat_tracebuys解析失敗紀錄並初始化" );
             echo "  異常-stat_tracebuys解析失敗紀錄並初始化\n";
         }
-
-        // if( $stat_tracesells == false & !is_array($stat_tracesells) ){
-        //     $stat_tracesells = array();
-        //     $this->sysLog($myBot , "myBot" , "ERR" , "異常-stat_tracesells解析失敗紀錄並初始化" );
-        //     echo "  異常-stat_tracesells解析失敗紀錄並初始化\n";
-        // }
 
         if( !is_numeric($stat_signalNum) ){
 
@@ -260,8 +246,7 @@ class DaemonPrice extends Command
             //檢查是否以持有該幣種，並且看是買入還是賣出訊號
             //1.未持有且買入訊號，則買入
             //2.未持有且賣出訊號，則追蹤買入
-            //3.持有且買入訊號，則追蹤賣出
-            //4.持有且賣出訊號，判斷價格是否已超過固定獲利1%或以上則賣出，沒有則追蹤買入(DCA)
+            //3.持有且賣出訊號，判斷價格是否已超過固定獲利1%或以上則賣出，沒有則追蹤買入(DCA)
 
             //檢查目前是否持有該訊號的幣種
             $isFindToken = array_search($sysSignalLog->token , array_column($stat_holdCoins, 'token'));
@@ -342,40 +327,10 @@ class DaemonPrice extends Command
                 break;//直接跳出外面迴圈
             }
 
-            //3.持有且買入訊號，則追蹤賣出
-            // if( $isHold == true && $sysSignalLog->direction == "buy" ){
-
-            //     echo "  執行策略-3.持有且買入訊號，則追蹤賣出，持有幣種將持續維持追蹤賣出\n";
-                
-            //     //檢查是否是持有且在追中買入的情形，如是則移出
-            //     foreach($stat_tracebuys as &$stat_tracebuy){
-            //         if( $stat_tracebuy["token"] == $sysSignalLog->token && 
-            //             $stat_tracebuy["timeFrame"] == $sysSignalLog->timeFrame 
-            //         ){
-            //             //如果有在已持有清單，且在追中買入模式，則移除追中買入模式，改為賣出
-            //             unset($stat_tracebuy);
-            //             break;
-            //         }
-            //     }
-
-            //     //把幣種移入追蹤賣出，回彈價格2%
-            //     $coin = array( "token" => $sysSignalLog->token  , 
-            //                     "price" => $sysSignalLog->price , 
-            //                     "reSellPrice" => $sysSignalLog->price * 1.02 , 
-            //                     "timeFrame" => $sysSignalLog->timeFrame 
-            //                     );
-            //     array_push($stat_tracesells, $coin);
-
-            //     $isProcess = true;
-            //     $stat_signalNum = $sysSignalLog->id;
-            //     break;//直接跳出外面迴圈
-
-            // }
-
-            //4.持有且賣出訊號，判斷價格是否已超過固定獲利1%或以上則賣出，沒有則追蹤買入(DCA)
+            //3.持有且賣出訊號，判斷價格是否已超過固定獲利1%或以上則賣出，沒有則追蹤買入(DCA)
             if( $isHold == true && $sysSignalLog->direction == "sell" ){
 
-                echo "  執行策略-4.持有且賣出訊號，判斷價格是否已超過固定獲利1%或以上則賣出，沒有則追蹤買入(DCA)\n";
+                echo "  執行策略-3.持有且賣出訊號，判斷價格是否已超過固定獲利1%或以上則賣出，沒有則追蹤買入(DCA)\n";
 
                 $symbolPrice = SymbolPrice::where('exchange', 'binance')->where('symbol', $sysSignalLog->token)->first();
                 echo "    目前現貨價格：" . $symbolPrice->price ."，機器人平均成本價格：" . $avgPrice . "\n";
@@ -410,17 +365,6 @@ class DaemonPrice extends Command
 
                     array_push($stat_tracebuys, $coin);
 
-
-                    //持有幣種增加註記，進入DCA
-                    // foreach($stat_holdCoins as $stat_holdCoin => $v){
-                    //     if( $v["token"] == $sysSignalLog->token && 
-                    //         $v["timeFrame"] == $sysSignalLog->timeFrame 
-                    //     ){
-                    //         $stat_holdCoins[$stat_holdCoin]["DCA"] += 1;//註記被加入了攤平計畫
-                    //         break;
-                    //     }
-                    // }
-
                 }
 
                 $stat_signalNum = $sysSignalLog->id;
@@ -432,12 +376,8 @@ class DaemonPrice extends Command
         }
 
         //已處理完所有新訊號，寫入資料庫
-        //更新持有清單 儲存目前 0已購入幣種 1平均成本 2總數量 3上次買入是(sell or buy) 4已經DCA次數 5時框
         $myBot->field_1 = serialize($stat_holdCoins);
-        //儲存目前 0追蹤中買入幣種 1最低價格 2反彈價格 3時框
         $myBot->field_2 = serialize($stat_tracebuys);
-        //儲存目前 0追蹤中賣出幣種 1最高價格 2反彈價格 3時框
-        // $myBot->field_3 = serialize($stat_tracesells);
         $myBot->field_4 = $stat_signalNum;
         $myBot->save();
 
@@ -610,12 +550,10 @@ class DaemonPrice extends Command
             }
         }
 
-
-
         //已處理完所有新訊號，寫入資料庫
         $myBot_upd = MyBot::find( $myBot->id );
-        $myBot_upd->field_1 = serialize($stat_holdCoins);//儲存目前 0已購入幣種 1平均成本 2總數量 3上次買入是(sell or buy) 4已經DCA次數
-        $myBot_upd->field_2 = serialize($stat_tracebuys);//儲存目前 追蹤中買入幣種 最低價格 反彈價格
+        $myBot_upd->field_1 = serialize($stat_holdCoins);
+        $myBot_upd->field_2 = serialize($stat_tracebuys);
         $myBot_upd->save();
 
         return true;
