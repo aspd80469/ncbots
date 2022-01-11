@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SignalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::group(['prefix' => 'v1/api'], function() {
+Route::group(['prefix' => 'v1'], function() {
     
-//     //[API][接收第三方訊號]
-//     Route::get('singnals', [SingalController::class, 'singalReceive']);
+    //[API][接收第三方訊號]
+    Route::post('signals', [SignalController::class, 'signalReceive']);
 
-// });
+});
 

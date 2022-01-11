@@ -10,5 +10,10 @@ class SysSignalLog extends Authenticatable
     protected $fillable = [
     ];
 
+    //返回
+    public function getSysSignals()
+    {
+        return $this->belongsTo(SysSignal::class, 'sigId', 'id');
+    }
 
 }

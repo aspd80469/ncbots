@@ -33,6 +33,7 @@ class SysSignalController extends Controller
         //[儲存]
         $validator = Validator::make($request->all(), [
             'ncToken' => 'required|string',
+            'tdsec' => 'required|string|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -44,6 +45,9 @@ class SysSignalController extends Controller
         $sysSignal = new SysSignal;
         $sysSignal->ncToken = htmlspecialchars($request->input('ncToken'), ENT_QUOTES);
         $sysSignal->tdsec = htmlspecialchars($request->input('tdsec'), ENT_QUOTES);
+        $sysSignal->expired_at = htmlspecialchars($request->input('expired_at'), ENT_QUOTES);
+        $sysSignal->onlyStgyIds = htmlspecialchars($request->input('onlyStgyIds'), ENT_QUOTES);
+        $sysSignal->status = htmlspecialchars($request->input('status'), ENT_QUOTES);
 
         if ($sysSignal->save()) {
             Session::flash('alert-success', '新增訊號Token成功');
@@ -70,7 +74,8 @@ class SysSignalController extends Controller
 
         //[更新]
         $validator = Validator::make($request->all(), [
-            'ncToken' => 'required|unique:sys_signals,ncToken',
+            'ncToken' => 'required|unique:sys_signals,ncToken,' .$id,
+            'tdsec' => 'required|string|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -82,6 +87,11 @@ class SysSignalController extends Controller
         $sysSignal = SysSignal::findOrFail($id);
         $sysSignal->ncToken = htmlspecialchars($request->input('ncToken'), ENT_QUOTES);
         $sysSignal->tdsec = htmlspecialchars($request->input('tdsec'), ENT_QUOTES);
+        if( !is_null(htmlspecialchars($request->input('expired_at'), ENT_QUOTES)) && !empty(htmlspecialchars($request->input('expired_at'), ENT_QUOTES)) ){
+            $sysSignal->expired_at = htmlspecialchars($request->input('expired_at'), ENT_QUOTES);
+        }
+        $sysSignal->onlyStgyIds = htmlspecialchars($request->input('onlyStgyIds'), ENT_QUOTES);
+        $sysSignal->status = htmlspecialchars($request->input('status'), ENT_QUOTES);
         
         if ($sysSignal->save()) {
             Session::flash('alert-success', '訊號Token更新成功');

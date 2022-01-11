@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserPlan;
+use App\Models\UserActPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -32,14 +33,18 @@ class UserPlanController extends Controller
 
         //[儲存]
         $validator = Validator::make($request->all(),[
-			'planName' => 'required',
+			'planName' => 'required|string',
+            'maxBotQty' => 'required|min:0',
 			'maxOrders' => 'required|min:0',
+            'maxAmount' => 'required|numeric|min:0',
 			'maxApiSlot' => 'required|numeric|min:1',
-            'payPeriod' => 'required',
-            'fee' => 'required|numeric|min:0',
-            'enabled' => 'required|max:1',
+            'feeBySeason' => 'required|numeric|min:0',
+            'feeByYear' => 'required|numeric|min:0',
+            'feeUnit' => 'required|string|min:0',
+            'suggest' => 'required|numeric|min:0',
+            'enabled' => 'required|numeric|max:1',
         ]);
-       
+
         if ( $validator->fails() )
         {
             return Redirect::back()
@@ -48,12 +53,15 @@ class UserPlanController extends Controller
         }
 
         $userPlan = new UserPlan;
-		
 		$userPlan->planName = htmlspecialchars($request->input('planName'), ENT_QUOTES);
+        $userPlan->maxBotQty = htmlspecialchars($request->input('maxBotQty'), ENT_QUOTES);
         $userPlan->maxOrders = htmlspecialchars($request->input('maxOrders'), ENT_QUOTES);
+        $userPlan->maxAmount = htmlspecialchars($request->input('maxAmount'), ENT_QUOTES);
 		$userPlan->maxApiSlot = htmlspecialchars($request->input('maxApiSlot'), ENT_QUOTES);
-		$userPlan->payPeriod = htmlspecialchars($request->input('payPeriod'), ENT_QUOTES);
-        $userPlan->fee = htmlspecialchars($request->input('fee'), ENT_QUOTES);
+		$userPlan->feeBySeason = htmlspecialchars($request->input('feeBySeason'), ENT_QUOTES);
+        $userPlan->feeByYear = htmlspecialchars($request->input('feeByYear'), ENT_QUOTES);
+        $userPlan->feeUnit = htmlspecialchars($request->input('feeUnit'), ENT_QUOTES);
+        $userPlan->suggest = htmlspecialchars($request->input('suggest'), ENT_QUOTES);
         $userPlan->enabled = htmlspecialchars($request->input('enabled'), ENT_QUOTES);
         
         if ( $userPlan->save() )
@@ -86,12 +94,16 @@ class UserPlanController extends Controller
 
         //[更新]
         $validator = Validator::make($request->all(),[
-			'planName' => 'required',
+			'planName' => 'required|string',
+            'maxBotQty' => 'required|min:0',
 			'maxOrders' => 'required|min:0',
+            'maxAmount' => 'required|numeric|min:0',
 			'maxApiSlot' => 'required|numeric|min:1',
-            'payPeriod' => 'required',
-            'fee' => 'required|numeric|min:0',
-            'enabled' => 'required|max:1',
+            'feeBySeason' => 'required|numeric|min:0',
+            'feeByYear' => 'required|numeric|min:0',
+            'feeUnit' => 'required|string|min:0',
+            'suggest' => 'required|numeric|min:0',
+            'enabled' => 'required|numeric|max:1',
         ]);
        
         if ( $validator->fails() )
@@ -104,10 +116,14 @@ class UserPlanController extends Controller
         $userPlan = UserPlan::findOrFail($id);
 		
 		$userPlan->planName = htmlspecialchars($request->input('planName'), ENT_QUOTES);
+        $userPlan->maxBotQty = htmlspecialchars($request->input('maxBotQty'), ENT_QUOTES);
         $userPlan->maxOrders = htmlspecialchars($request->input('maxOrders'), ENT_QUOTES);
+        $userPlan->maxAmount = htmlspecialchars($request->input('maxAmount'), ENT_QUOTES);
 		$userPlan->maxApiSlot = htmlspecialchars($request->input('maxApiSlot'), ENT_QUOTES);
-		$userPlan->payPeriod = htmlspecialchars($request->input('payPeriod'), ENT_QUOTES);
-        $userPlan->fee = htmlspecialchars($request->input('fee'), ENT_QUOTES);
+		$userPlan->feeBySeason = htmlspecialchars($request->input('feeBySeason'), ENT_QUOTES);
+        $userPlan->feeByYear = htmlspecialchars($request->input('feeByYear'), ENT_QUOTES);
+        $userPlan->feeUnit = htmlspecialchars($request->input('feeUnit'), ENT_QUOTES);
+        $userPlan->suggest = htmlspecialchars($request->input('suggest'), ENT_QUOTES);
         $userPlan->enabled = htmlspecialchars($request->input('enabled'), ENT_QUOTES);
 
         if( $userPlan->save() )
@@ -127,6 +143,13 @@ class UserPlanController extends Controller
 
         //[刪除]
         $userPlan = UserPlan::findOrFail($id);
+
+        //如果此方案已被使用者使用，不可以刪除
+        $userActPlanCount = UserActPlan::where('planID' , $id)->count();
+        if( $userActPlanCount > 0 ){
+            Session::flash('alert-warning', '方案已被使用者訂購，僅能停用方案無法刪除');
+            return redirect('/mge/userPlans');
+        }
 
         //刪除方案
         Session::flash('alert-danger', '已成功刪除方案 ' . $userPlan->id);

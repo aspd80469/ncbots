@@ -43,12 +43,22 @@
 
                         <div class="mb-3">
                             <label for="password" class="form-label">密碼<span class="text-danger">*</span></label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="請輸入密碼@if( !is_null($manager) )，無變更請留空@else 最少6個字元  @endif" @if( is_null($manager) )  required minlength="6" @endif>
+                            <div class="input-group input-group-merge">
+                                <input type="password" id="password" name="password" class="form-control" placeholder="請輸入密碼@if( !is_null($manager) )，無變更請留空@else 最少6個字元  @endif" @if( is_null($manager) )  required minlength="6" @endif>
+                                <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="form-group mb-3">
                             <button type="submit" class="btn btn-blue waves-effect waves-light">儲存</button>
                             <button type="button"" class="btn btn-secondary waves-effect" onclick="window.location='{{ url("mge/managers" )}}'">返回</button>
+
+                            @if( !is_null($manager) )
+							<a href="{{ url("mge/managers/delete/" . $manager->id )}}" onclick="javascript:return confirm('確認刪除管理帳號?');" class="btn btn-danger waves-effect">刪除</a>
+							@endif
                         </div>
                         
                     </form>

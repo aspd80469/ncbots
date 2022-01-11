@@ -10,8 +10,7 @@
                 
             </div>
             <h4 class="page-title">參數設定 &nbsp; &nbsp;
-                
-                <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/settings/add') }}'"><i class="fas fa-plus"></i> 新增參數</button>
+            <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/settings/add') }}'"><i class="fas fa-plus"></i> 新增參數</button>
             </h4>
         </div>
     </div>
@@ -43,7 +42,7 @@
                                     {{ $setting->sdesc }}
                                   </td>
                                 <td>
-                                    {{ $setting->value }}
+                                    <textarea class="form-control" readonly="readonly">{{ $setting->value }}</textarea>
                                   </td>
                                 <td>
                                     <button type="submit" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url("mge/settings/" . $setting->id )}}'">編輯</button>

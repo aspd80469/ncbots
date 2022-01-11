@@ -75,7 +75,7 @@ return [
 
         'managers' => [
 			'driver' => 'eloquent',
-			'model' => App\Manager::class,
+			'model' => App\Models\Manager::class,
 		],
     ],
 

@@ -37,24 +37,47 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="name" class="form-label">參數<span class="text-danger">*</span></label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="請輸入參數" value="@if( !is_null($setting) ){{ $setting->name }}@endif">
+                            <label for="sname" class="form-label">參數<span class="text-danger">*</span></label>
+                            <input type="text" id="sname" name="sname" class="form-control" placeholder="請輸入參數" value="@if( !is_null($setting) ){{ $setting->name }}@endif">
+
                         </div>
 
                         <div class="mb-3">
-                            <label for="value" class="form-label">設定值</label>
-                            <textarea class="form-control">@if( !is_null($setting) ){{ $setting->value }}@endif</textarea>
+                            <label for="svalue" class="form-label">設定值</label>
+                            <textarea class="form-control" id="svalue" name="svalue" rows="10">@if( !is_null($setting) ){!! html_entity_decode($setting->value) !!}@endif</textarea>
+
                         </div>
 
                         <div class="mb-3">
-                            <label for="value" class="form-label">描述</label>
-                            <textarea class="form-control">@if( !is_null($setting) ){{ $setting->sdesc }}@endif</textarea>
+                            <label for="sdesc" class="form-label">描述</label>
+                            <textarea class="form-control" id="sdesc" name="sdesc" placeholder="請輸入描述" rows="5">@if( !is_null($setting) ){{ $setting->sdesc }}@endif</textarea>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="sysDefPara" class="form-label" @if( !is_null($setting) && $setting->sysDefPara == '1') style="display:none" @endif>系統必須參數</label>
+                            <select class="form-control" name="sysDefPara" @if( !is_null($setting) && $setting->sysDefPara == '1') style="display:none" @endif>
+								<option value="0" @if ( is_null($setting) | (!is_null($setting) && $setting->sysDefPara == '0') ) selected @endif>否</option>
+								<option value="1" @if ( !is_null($setting) && $setting->sysDefPara == '1' ) selected @endif>是</option>
+							</select>
+							@if( $errors->has('sysDefPara') )
+							<span class="help-block" style="color: red;">
+							<strong>必填，必須選擇一個選項</strong>
+							</span>
+							@endif
+
+                            <span class="help-block" style="color: red;">
+							<strong>如選擇為【是】，新增後無法透過後臺刪除</strong>
+							</span>
+
                         </div>
 
                         <div class="form-group mb-3">
                             <button type="submit" class="btn btn-blue waves-effect waves-light">儲存</button>
                             <button type="button"" class="btn btn-secondary waves-effect" onclick="window.location='{{ url("mge/settings" )}}'">返回</button>
+                            @if(!is_null($setting) && $setting->sysDefPara == "0" )
                             <button type="submit" class="btn btn-danger waves-effect waves-light" onclick="window.location='{{ url("mge/settings/delete/" . $setting->id  )}}'">刪除</button>
+                            @endif
                         </div>
                         
                     </form>

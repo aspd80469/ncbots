@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>NC BOT</title>
+        <title>Nigripes BOT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="NC AI BOT" name="description" />
         <meta content="NC AI BOT" name="author" />
@@ -14,9 +14,6 @@
 		<!-- App css -->
 		<link href="{{ asset('assets/css/config/default/bootstrap.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
 		<link href="{{ asset('assets/css/config/default/app.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
-
-		<link href="{{ asset('assets/css/config/default/bootstrap-dark.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
-		<link href="{{ asset('assets/css/config/default/app-dark.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
 
 		<!-- icons -->
 		<link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
@@ -48,19 +45,19 @@
                             </div>
                         </div>
 
-                        <!-- title-->
-                        <h4 class="mt-0">註冊</h4>
-                        <p class="text-muted mb-4"></p>
-
                         <!-- form -->
                         <form action="{{ route('register') }}">
-                            {{-- <div class="mb-3">
-                                <label for="name" class="form-label">姓名</label>
-                                <input class="form-control" type="text" id="name" required="" placeholder="請輸入姓名" autofocus autocomplete="name">
-                            </div> --}}
+
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
                                 <input class="form-control" type="email" id="email" required="" placeholder="請輸入Email">
+
+                                @if( $errors->has('email') )
+								<span class="help-block">
+								<strong>請確認Email格式</strong>
+								</span>
+								@endif
+
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">密碼</label>
@@ -69,8 +66,16 @@
                                     <div class="input-group-text" data-password="false">
                                         <span class="password-eye"></span>
                                     </div>
+
+                                    @if( $errors->has('password') )
+                                    <span class="help-block" style="color: red;">
+                                    <strong>請確認密碼輸入是否一致</strong>
+                                    </span>
+                                    @endif
+
                                 </div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="password_confirmation" class="form-label">再次輸入密碼</label>
                                 <div class="input-group input-group-merge">
@@ -78,14 +83,30 @@
                                     <div class="input-group-text" data-password="false">
                                         <span class="password-eye"></span>
                                     </div>
+
+                                    @if( $errors->has('password_confirmation') )
+                                    <span class="help-block" style="color: red;">
+                                    <strong>請確認密碼輸入是否一致</strong>
+                                    </span>
+                                    @endif
+
                                 </div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="refCode" class="form-label">推薦碼</label>
                                 <div class="input-group input-group-merge">
                                     <input type="text" id="refCode" name="refCode" class="form-control" placeholder="請輸入推薦碼">
                                 </div>
+
+                                @if( $errors->has('refCode') )
+                                <span class="help-block" style="color: red;">
+                                <strong>請輸入推薦碼</strong>
+                                </span>
+                                @endif
+
                             </div>
+
                             <div class="mb-3">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="checkbox-signup">
@@ -93,14 +114,14 @@
                                 </div>
                             </div>
                             <div class="text-center d-grid">
-                                <button class="btn btn-primary waves-effect waves-light" type="submit"> 註冊 </button>
+                                <button class="btn btn-blue waves-effect waves-light" type="submit"> 註冊 </button>
                             </div>
                         </form>
                         <!-- end form-->
 
                         <!-- Footer-->
                         <footer class="footer footer-alt">
-                            <p class="text-muted">已經有帳號? <a href="{{ route('login') }}" class="text-muted ms-1"><b>登入</b></a></p>
+                            <p class="text-muted">已經有帳號? <a href="{{ route('login') }}" class="ms-1"><b>登入</b></a></p>
                         </footer>
 
                     </div> <!-- end .card-body -->

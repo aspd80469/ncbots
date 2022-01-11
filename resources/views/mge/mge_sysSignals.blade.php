@@ -28,6 +28,8 @@
                             <tr>
                                 <th>Token</th>
                                 <th>描述</th>
+                                <th>有效期限</th>
+                                <th>啟用</th>
                                 <th>管理</th>
                             </tr>
                         </thead>
@@ -40,6 +42,19 @@
                                 <td>
                                     {{ $sysSignal->tdsec }}
                                 </td>
+                                <td>
+                                    @if(is_null($sysSignal->expired_at))
+                                    無期限
+                                    @endif
+                                    {{ $sysSignal->expired_at }}
+                                </td>
+                                <td>
+                                    @if( $sysSignal->status == '0')
+                                    <span class="badge bg-success font-16">啟用</span>
+                                    @else
+                                    停用
+                                    @endif
+                                  </td>
                                 <td>
                                     <button type="submit" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url("mge/sysSignals/" . $sysSignal->id )}}'">編輯</button>
                                   </td>

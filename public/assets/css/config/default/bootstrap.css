@@ -203,10 +203,10 @@ sup {
   top: -.5em; }
 
 a {
-  color: #6658dd;
+  color: #084d6e;
   text-decoration: none; }
   a:hover {
-    color: #473e9b;
+    color: #d4a149;
     text-decoration: none; }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {

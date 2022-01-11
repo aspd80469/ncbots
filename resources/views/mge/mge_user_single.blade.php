@@ -28,7 +28,7 @@
 
                     <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="
 					@if( is_null($user) )
-					{{ URL::to('mge/user')}}
+					{{ URL::to('mge/user/add')}}
 					@else
 					{{ URL::to('mge/user')}}/{{ $user->id }}
 					@endif
@@ -42,19 +42,18 @@
 								<input type="text" id="email" name="email" class="form-control" placeholder="請輸入Email" value="">
 								
 								@if( $errors->has('email') )
-								<span class="help-block">
+								<span class="help-block" style="color: red;">
 								<strong>必填</strong>
 								</span>
 								@endif
 								
 							@else
-							
-								{{ $user->email }}
+							<label for="email" class="form-control">
+                                {{ $user->email }}
+                            </label>
+								
 							
 							@endif
-							
-							
-					
                         </div>
 
                         <div class="mb-3">
@@ -62,9 +61,9 @@
                             <input type="text" id="name" name="name" class="form-control" placeholder="請輸入姓名" value="@if( !is_null($user) ){{ $user->name }}@endif">
 							
 							@if( $errors->has('name') )
-							<span class="help-block">
-							<strong>必填，最大長度為20字元</strong>
-							</span>
+                                <span class="help-block" style="color: red;">
+                                <strong>必填，最大長度為20字元</strong>
+                                </span>
 							@endif
 					
                         </div>
@@ -72,23 +71,50 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">密碼<span class="text-danger">*</span></label>
                             <input type="text" id="password" name="password" class="form-control" placeholder="請輸入密碼@if( !is_null($user) )，無變更請留空@else 最少6個字元  @endif" >
+
+                            @if( !is_null($user) )
+                            <button type="button"" class="btn btn-danger waves-effect" onclick="window.location='{{ url("mge/userPwdReset/" )}}/{{ $user->id }}'">重置</button>
+                            @endif
+
                         </div>
 						
 						<div class="mb-3">
-                            <label for="name" class="form-label">備註</label>
+                            <label for="notice" class="form-label">備註</label>
                             <textarea class="form-control" name="notice" >@if( !is_null($user) ){{ $user->notice }}@endif</textarea>
 					
                         </div>
-						
+
+                        @if( !is_null($user) )
+                        <div class="mb-3">
+                            <label for="burnMoney" class="form-label">燃料費</label>
+                            <label for="burnMoney" class="form-control">
+                                {{ $user->burnMoney }}
+                            </label>
+                            
+                            <button type="button"" class="btn btn-secondary waves-effect" onclick="window.location='{{ url("mge/userBurnMoney/" )}}/{{ $user->id }}'" >異動</button>
+                        </div>
+                        @endif
+
+						<div class="mb-3">
+                            <label for="tgId" class="form-label">Telegram ID</label>
+                            <input type="text" id="tgId" name="tgId" class="form-control" maxlength="20" placeholder="請輸入Telegram ID" value="@if( !is_null($user) ){{ $user->tgId }}@endif">
+							
+							@if( $errors->has('tgId') )
+                                <span class="help-block" style="color: red;">
+                                <strong>必填，最大長度為20字元</strong>
+                                </span>
+							@endif
+					
+                        </div>
 						
 						<div class="mb-3">
-						
+                            <label for="status" class="form-label">狀態</label>
 							<select class="form-control" name="status">
 								<option value="0" @if ( !is_null($user) && $user->status == '0' ) selected @endif>啟用</option>
 								<option value="1" @if ( !is_null($user) && $user->status == '1' ) selected @endif>停用</option>
 							</select>
 							@if( $errors->has('status') )
-							<span class="help-block">
+							<span class="help-block" style="color: red;">
 							<strong>必填，必須選擇一個選項</strong>
 							</span>
 							@endif

@@ -4,7 +4,7 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>NC BOT</title>
+        <title>Nigripes BOT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="NC AI BOT" name="description" />
         <meta content="NC AI BOT" name="author" />
@@ -15,16 +15,18 @@
         <!-- Plugins css -->
         <link href="{{ asset('assets/libs/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('assets/libs/selectize/css/selectize.bootstrap3.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/libs/quill/quill.core.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/libs/quill/quill.bubble.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('assets/libs/quill/quill.snow.css') }}" rel="stylesheet" type="text/css" />
         
         <!-- App css -->
         <link href="{{ asset('assets/css/config/default/bootstrap.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
         <link href="{{ asset('assets/css/config/default/app.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
 
-        <link href="{{ asset('assets/css/config/default/bootstrap-dark.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
-        <link href="{{ asset('assets/css/config/default/app-dark.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
-
         <!-- icons -->
         <link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
+
+        @livewireStyles
 
     </head>
 
@@ -38,19 +40,8 @@
         <div class="navbar-custom">
             <div class="container-fluid">
                 <ul class="list-unstyled topnav-menu float-end mb-0">
-            
-                    <li class="dropdown d-inline-block d-lg-none">
-                        <a class="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <i class="fe-search noti-icon"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-lg dropdown-menu-end p-0">
-                            <form class="p-3">
-                                <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
-                            </form>
-                        </div>
-                    </li>
                     
-                    <li class="dropdown notification-list topbar-dropdown">
+                    {{-- <li class="dropdown notification-list topbar-dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <i class="fe-bell noti-icon"></i>
                             <span class="badge bg-danger rounded-circle noti-icon-badge">1</span>
@@ -89,33 +80,39 @@
                             </a>
             
                         </div>
-                    </li>
+                    </li> --}}
             
                     <li class="dropdown notification-list topbar-dropdown">
                         <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <span class="pro-user-name ms-1">
-                                Geneva <i class="mdi mdi-chevron-down"></i> 
+                                {{-- @if(!Auth::guard('manager')->user())
+                                HI! {{ Auth::User()->email}} 
+                                @else
+                                HI! {{ Auth::User()->account}} 
+                                @endif --}}
+                                <i class="mdi mdi-chevron-down"></i> 
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
                             <!-- item-->
-                            <div class="dropdown-header noti-title">
-                                <h6 class="text-overflow m-0">您好!</h6>
-                            </div>
-            
+                            @if(!Auth::guard('manager')->user())
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <a href="{{ route('profile') }}" class="dropdown-item notify-item">
                                 <i class="fe-user"></i>
                                 <span>會員資料</span>
                             </a>
-            
-                            <div class="dropdown-divider"></div>
+                            @endif
             
                             <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
+                            <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="event.preventDefault();
+                            document.getElementById('logout-form-top').submit();">
                                 <i class="fe-log-out"></i>
                                 <span>登出</span>
                             </a>
+
+                            <form id="logout-form-top" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
             
                         </div>
                     </li>
@@ -124,7 +121,7 @@
             
                 <!-- LOGO -->
                 <div class="logo-box">
-                    <a href="index.html" class="logo logo-dark text-center">
+                    <a href="@if(!Auth::guard('manager')->user()){{ route('dashboard') }}@else{{ route('admin') }}@endif" class="logo logo-dark text-center">
                         <span class="logo-sm">
                             <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
                             <!-- <span class="logo-lg-text-light">UBold</span> -->
@@ -135,12 +132,12 @@
                         </span>
                     </a>
             
-                    <a href="index.html" class="logo logo-light text-center">
-                        <span class="logo-sm">
-                            <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                    <a href="@if(!Auth::guard('manager')->user()){{ route('dashboard') }}@else{{ route('admin') }}@endif" class="logo logo-light text-center">
+                        <span class="logo-sm logo-lg-text-light">
+                            NC BOTS
                         </span>
-                        <span class="logo-lg">
-                            <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="20">
+                        <span class="logo-lg logo-lg-text-light">
+                            NC BOTS
                         </span>
                     </a>
                 </div>
@@ -180,6 +177,7 @@
 
                     <ul id="side-menu">
 
+                        @if(!Auth::guard('manager')->user())
                         <li class="menu-title">會員選單</li>
 
                         <li>
@@ -199,7 +197,7 @@
                         <li>
                             <a href="{{ url('userPlanRecords') }}" class="active">
                                 <i class="fas fa-list-alt"></i>
-                                <span> 付費紀錄 </span>
+                                <span> 方案訂單 </span>
                             </a>
                         </li>
 
@@ -210,8 +208,15 @@
                             </a>
                         </li>
 
-                       
+                        <li>
+                            <a href="{{ url('apiSettings') }}" class="active">
+                                <i class="fas fa-laptop-code"></i>
+                                <span> API Key 設定 </span>
+                            </a>
+                        </li>
+                        @endif
 
+                        @if(Auth::guard('manager')->user())
                         <li class="menu-title">管理選單</li>
 
                         <li>
@@ -239,6 +244,12 @@
                         </li>
 
                         <li>
+                            <a href="{{ url('mge/userPlans') }}">
+                                <i class="fas fa-archive"></i>
+                                方案管理</a>
+                        </li>
+
+                        <li>
                             <a href="{{ url('mge/manualOrders') }}">
                                 <i class="fas fa-broom"></i>
                                 <span> 手動補單 </span>
@@ -247,11 +258,47 @@
                         </li>
 
                         <li>
-                            <a href="{{ url('mge/signals') }}">
+                            <a href="{{ url('mge/botStgys') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                                <span> 指標訊號 </span>
+                                策略管理
                             </a>
+                        </li>
 
+                        <li>
+                            <a href="{{ url('mge/news') }}">
+                                <i class="far fa-newspaper"></i>
+                                最新消息
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('mge/sysSignals') }}">
+                                <i class="far fa-check-square"></i>
+                                訊號Token</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('mge/binancePrice') }}">
+                                <i class="fas fa-coins"></i>
+                                幣安現貨報價</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('mge/ftxPrice') }}">
+                                <i class="fas fa-comments-dollar"></i>
+                                FTX現貨報價</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('mge/sysSignalLogs') }}">
+                                <i class="far fa-chart-bar"></i>
+                                訊號紀錄</a>
+                        </li>
+
+                        <li>
+                            <a href="{{ url('mge/sysLogs') }}">
+                                <i class="far fa-list-alt"></i>
+                                系統紀錄</a>
                         </li>
 
                         <li>
@@ -263,6 +310,10 @@
                                 <ul class="nav-second-level">
 
                                     <li>
+                                        <a href="{{ url('mge/sysStatus') }}">系統狀態</a>
+                                    </li>
+
+                                    <li>
                                         <a href="{{ url('mge/settings') }}">參數設定</a>
                                     </li>
 
@@ -270,32 +321,10 @@
                                         <a href="{{ url('mge/managers') }}">管理帳號</a>
                                     </li>
 
-                                    <li>
-                                        <a href="{{ url('mge/userPlans') }}">方案管理</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="{{ url('mge/riskNotice') }}">風險聲明</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="{{ url('mge/sysSignals') }}">訊號Token</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="{{ url('mge/sysSignalLogs') }}">訊號紀錄</a>
-                                    </li>
-
-                                    <li>
-                                        <a href="{{ url('mge/sysLogs') }}">系統紀錄</a>
-                                    </li>
-
                                 </ul>
                             </div>
                         </li>
-
-
-                        
+                        @endif
 
                         <li>
                             <a href="{{ route('logout') }}"
@@ -312,8 +341,6 @@
 
                 </div>
                 <!-- End Sidebar -->
-
-                <div class="clearfix"></div>
 
             </div>
             <!-- Sidebar -left -->
@@ -363,7 +390,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-6">
-                            <script>2021 - document.write(new Date().getFullYear())</script> &copy; <a href="">NC AI BOT</a> 
+                            <script>2021 - document.write(new Date().getFullYear())</script> &copy; <a href="">Nigripes AI BOT</a> 
                         </div>
                         <div class="col-md-6">
                             <div class="text-md-end footer-links d-none d-sm-block">
@@ -385,21 +412,24 @@
         </div>
         <!-- END wrapper -->
 
-        <!-- Right bar overlay-->
-        <div class="rightbar-overlay"></div>
-
         <!-- Vendor js -->
-        <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
+        <script src="{{ asset('assets/js/vendor.js') }}"></script>
 
         <!-- Plugins js-->
-        <script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/selectize/js/standalone/selectize.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/flatpickr/flatpickr.js') }}"></script>
+        <script src="{{ asset('assets/libs/selectize/js/standalone/selectize.js') }}"></script>
+        <script src="{{ asset('assets/libs/quill/quill.js') }}"></script>
+
+        <!-- Init js-->
+        <script src="{{ asset('assets/js/pages/form-quilljs.init.js') }}"></script>
 
         <!-- Dashboar 1 init js-->
         <script src="{{ asset('assets/js/pages/dashboard-1.init.js') }}"></script>
 
         <!-- App js-->
-        <script src="{{ asset('assets/js/app.min.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
+
+        @livewireScripts
         
     </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>NC BOT</title>
+        <title>Nigripes BOT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="NC BOT" name="description" />
         <meta content="NC BOT" name="author" />
@@ -31,12 +31,12 @@
                                 
                                 <div class="text-center w-75 m-auto">
                                     <a href="#" style="color:black;">
-                                        <h4>NC BOT | 管理 </h4>
+                                        <h4>Nigripes BOT | 管理 </h4>
                                     </a>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label for="account">Email</label>
+                                    <label for="account">帳號</label>
                                     <input id="account" type="text" class="form-control{{ $errors->has('account') ? ' is-invalid' : '' }}" name="account" value="{{ old('account') }}" placeholder="請輸入帳號" required autofocus>
                                 </div>
 

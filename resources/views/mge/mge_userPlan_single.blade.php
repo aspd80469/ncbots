@@ -28,20 +28,32 @@
 
                     <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" action="
 					@if( is_null($userPlan) )
-					{{ URL::to('mge/userPlan')}}
+					{{ URL::to('mge/userPlans')}}/add
 					@else
-					{{ URL::to('mge/userPlan')}}/{{ $userPlan->id }}
+					{{ URL::to('mge/userPlans')}}/{{ $userPlan->id }}
 					@endif
 					">
 					@csrf
 
                         <div class="mb-3">
                             <label for="planName" class="form-label">方案名稱</label>
-                            <input type="text" id="planName" name="planName" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->planName }}@endif">
+                            <input type="text" id="planName" name="planName" maxlength="20" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->planName }}@endif" required>
 							
 							@if( $errors->has('planName') )
-							<span class="help-block">
+							<span class="help-block" style="color: red;">
 							<strong>必填，最大長度為20字元</strong>
+							</span>
+							@endif
+					
+                        </div>
+
+						<div class="mb-3">
+                            <label for="maxBotQty" class="form-label">最大機器數量</label>
+                            <input type="number" id="maxBotQty" name="maxBotQty" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->maxBotQty }}@endif" required>
+							
+							@if( $errors->has('maxBotQty') )
+							<span class="help-block" style="color: red;">
+							<strong>必填</strong>
 							</span>
 							@endif
 					
@@ -49,10 +61,22 @@
 
                         <div class="mb-3">
                             <label for="maxOrders" class="form-label">最大下單量</label>
-                            <input type="text" id="maxOrders" name="maxOrders" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->maxOrders }}@endif">
+                            <input type="number" id="maxOrders" name="maxOrders" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->maxOrders }}@endif" required>
 							
 							@if( $errors->has('maxOrders') )
-							<span class="help-block">
+							<span class="help-block" style="color: red;">
+							<strong>必填</strong>
+							</span>
+							@endif
+					
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="maxAmount" class="form-label">最大資金上限</label>
+                            <input type="number" id="maxAmount" name="maxAmount" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->maxAmount }}@endif" required>
+							
+							@if( $errors->has('maxAmount') )
+							<span class="help-block" style="color: red;">
 							<strong>必填</strong>
 							</span>
 							@endif
@@ -61,10 +85,10 @@
 
                         <div class="mb-3">
                             <label for="maxApiSlot" class="form-label">Api數量</label>
-                            <input type="text" id="maxApiSlot" name="maxApiSlot" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->maxApiSlot }}@endif">
+                            <input type="number" id="maxApiSlot" name="maxApiSlot" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->maxApiSlot }}@endif" required>
 							
 							@if( $errors->has('maxApiSlot') )
-							<span class="help-block">
+							<span class="help-block" style="color: red;">
 							<strong>必填</strong>
 							</span>
 							@endif
@@ -72,11 +96,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="payPeriod" class="form-label">付款週期</label>
-                            <input type="text" id="payPeriod" name="payPeriod" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->payPeriod }}@endif">
+                            <label for="feeBySeason" class="form-label">季費</label>
+                            <input type="number" id="feeBySeason" name="feeBySeason" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->feeBySeason }}@endif" required>
 							
-							@if( $errors->has('payPeriod') )
-							<span class="help-block">
+							@if( $errors->has('feeBySeason') )
+							<span class="help-block" style="color: red;">
 							<strong>必填</strong>
 							</span>
 							@endif
@@ -84,11 +108,38 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="fee" class="form-label">費用</label>
-                            <input type="text" id="fee" name="fee" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->fee }}@endif">
+                            <label for="feeByYear" class="form-label">年費</label>
+                            <input type="number" id="feeByYear" name="feeByYear" class="form-control" placeholder="" value="@if( !is_null($userPlan) ){{ $userPlan->feeByYear }}@endif" required>
 							
-							@if( $errors->has('fee') )
-							<span class="help-block">
+							@if( $errors->has('feeByYear') )
+							<span class="help-block" style="color: red;">
+							<strong>必填</strong>
+							</span>
+							@endif
+					
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="feeUnit" class="form-label">貨幣單位</label>
+                            <input type="text" id="feeUnit" name="feeUnit" maxlength="5" class="form-control" placeholder="USDT" value="@if( !is_null($userPlan) ){{ $userPlan->feeUnit }}@endif" required>
+							
+							@if( $errors->has('feeUnit') )
+							<span class="help-block" style="color: red;">
+							<strong>必填</strong>
+							</span>
+							@endif
+					
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="suggest" class="form-label">是否為推薦</label>
+							<select class="form-control" id="suggest" name="suggest" required>
+								<option value="1" @if ( !is_null($userPlan) && $userPlan->suggest == '1' ) selected @endif>是</option>
+								<option value="0" @if ( !is_null($userPlan) && $userPlan->suggest == '0' ) selected @endif>否</option>
+							</select>
+							
+							@if( $errors->has('suggest') )
+							<span class="help-block" style="color: red;">
 							<strong>必填</strong>
 							</span>
 							@endif
@@ -97,14 +148,14 @@
 						
 						<div class="mb-3">
 						
-                            <label for="fee" class="form-label">啟用</label>
-							<select class="form-control" name="enabled">
-								<option value="0" @if ( !is_null($userPlan) && $userPlan->enabled == '0' ) selected @endif>啟用</option>
-								<option value="1" @if ( !is_null($userPlan) && $userPlan->enabled == '1' ) selected @endif>停用</option>
+                            <label for="enabled" class="form-label">啟用</label>
+							<select class="form-control" id="enabled" name="enabled" required>
+								<option value="1" @if ( !is_null($userPlan) && $userPlan->enabled == '1' ) selected @endif>啟用</option>
+								<option value="0" @if ( !is_null($userPlan) && $userPlan->enabled == '0' ) selected @endif>停用</option>
 							</select>
 							
 							@if( $errors->has('enabled') )
-							<span class="help-block">
+							<span class="help-block" style="color: red;">
 							<strong>必填，必須選擇一個選項</strong>
 							</span>
 							@endif
@@ -116,7 +167,7 @@
                             <button type="button"" class="btn btn-secondary waves-effect" onclick="window.location='{{ url("mge/userPlans" )}}'">返回</button>
 							
 							@if( !is_null($userPlan) )
-							<a href="{{ url("mge/userPlan/delete/" . $userPlan->id )}}" onclick="javascript:return confirm('確認刪除方案?');" class="btn btn-danger waves-effect">刪除</a>
+							<a href="{{ url("mge/userPlans/delete/" . $userPlan->id )}}" onclick="javascript:return confirm('確認刪除方案?');" class="btn btn-danger waves-effect">刪除</a>
 							@endif
 				
                         </div>

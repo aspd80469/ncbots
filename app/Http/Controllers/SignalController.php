@@ -48,6 +48,7 @@ class SignalController extends Controller
         
         if( 
             !array_key_exists( "ncToken" , $data) |
+            !array_key_exists( "kType" , $data) |
             !array_key_exists( "token" , $data) |
             !array_key_exists( "price" , $data) |
             !array_key_exists( "timeFrame" , $data) |
@@ -63,6 +64,7 @@ class SignalController extends Controller
         
         //過濾html
         $data['ncToken'] = htmlspecialchars($data['ncToken'], ENT_QUOTES);
+        $data['kType'] = htmlspecialchars($data['kType'], ENT_QUOTES);
         $data['token'] = htmlspecialchars($data['token'], ENT_QUOTES);
         $data['price'] = htmlspecialchars($data['price'], ENT_QUOTES);
         $data['timeFrame'] = htmlspecialchars($data['timeFrame'], ENT_QUOTES);
@@ -71,22 +73,37 @@ class SignalController extends Controller
 
         //檢查ncToken是否存在
         $sysSignal = SysSignal::where('ncToken', $data['ncToken'])->first();
-        if(is_null($sysSignal) | Carbon::now()->gt(Carbon::parse($sysSignal->expired_at)) ){
+        
+        if( is_null($sysSignal) | $sysSignal->status == 1 ){
             $rData['code'] = "-103";
-            $rData['msg'] ="驗證token無效";
+            $rData['msg'] ="無Token或Token停用";
+            return json_encode($rData);
+
+        }
+
+        if(Carbon::now()->gt(Carbon::parse($sysSignal->expired_at)) ){
+            $rData['code'] = "-104";
+            $rData['msg'] ="驗證token無效，已過期";
+            return json_encode($rData);
+        }
+
+        //檢查資料格式 - ktype
+        if(strlen($data['kType']) > 10){
+            $rData['code'] = "-105";
+            $rData['msg'] = "ktype長度大於10";
             return json_encode($rData);
         }
         
         //檢查資料格式 - token
         if(strlen($data['token']) > 10){
-            $rData['code'] = "-110";
+            $rData['code'] = "-106";
             $rData['msg'] = "token長度大於10";
             return json_encode($rData);
         }
         
         //檢查資料格式 - price
         if(strlen($data['price']) > 20){
-            $rData['code'] = "-111";
+            $rData['code'] = "-107";
             $rData['msg'] ="price長度大於10";
             return json_encode($rData);
         }
@@ -96,18 +113,21 @@ class SignalController extends Controller
             ($data['timeFrame'] != "15m" & 
             $data['timeFrame'] != "30m" &
             $data['timeFrame'] != "1h" &
+            $data['timeFrame'] != "2h" &
             $data['timeFrame'] != "4h" & 
+            $data['timeFrame'] != "6h" &
+            $data['timeFrame'] != "12h" &
             $data['timeFrame'] != "day" & 
             $data['timeFrame'] != "week")
         ){
-            $rData['code'] = "-112";
+            $rData['code'] = "-108";
             $rData['msg'] ="timeFrame長度大於4或非指定參數";
             return json_encode($rData);
         }
         
         //檢查資料格式 - direction
         if(strlen($data['direction']) > 4 | ($data['direction'] != "sell" & $data['direction'] != "buy" )){
-            $rData['code'] = "-113";
+            $rData['code'] = "-109";
             $rData['msg'] ="direction長度大於4或非指定參數";
             return json_encode($rData);
         }
@@ -118,13 +138,14 @@ class SignalController extends Controller
             $data['exchange'] != "ftx")
         ){
             
-            $rData['code'] = "-114";
+            $rData['code'] = "-110";
             $rData['msg'] ="exchange長度大於10或非指定參數";
             return json_encode($rData);
         }
 
         //寫入資料庫
         $signal = new SysSignalLog();
+        $signal->kType = $data['kType'];
         $signal->token = $data['token'];
         $signal->sigId = $sysSignal->id;
         $signal->price = $data['price'];
@@ -132,9 +153,6 @@ class SignalController extends Controller
         $signal->direction = $data['direction'];
         $signal->exchange = $data['exchange'];
         $signal->save();
-        
-        //加入Queene or 直接下單
-        
 
         $rData['code'] = "200";
         $rData['msg'] = "";

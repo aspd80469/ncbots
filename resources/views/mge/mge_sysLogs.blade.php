@@ -29,6 +29,7 @@
                                 <th>#</th>
 								<th>時間</th>
                                 <th>類型</th>
+                                <th>機器人ID</th>
                                 <th>動作</th>
 								<th>內容</th>
                                 <th>使用者</th>
@@ -38,7 +39,7 @@
                             @foreach( $sysLogs as $sysLog )
                             <tr>
                                 <td>
-                                  {{ $sysLog->id }}
+                                  #{{ $sysLog->id }}
                                 </td>
                                 <td>
 									{{ $sysLog->created_at }}
@@ -47,13 +48,16 @@
 									{{ $sysLog->type }}
                                 </td>
                                 <td>
+                                    {{ $sysLog->myBotId }}
+                                </td>
+                                <td>
 									{{ $sysLog->operation }}
                                 </td>
 								<td>
 									{{ $sysLog->msg }}
                                 </td>
                                 <td>
-									{{ $sysLog->userid }}
+									{{ $sysLog->userid }}-{{ $sysLog->getUser->email }}
                                 </td>
                             </tr>
                             @endforeach

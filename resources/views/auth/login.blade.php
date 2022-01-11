@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>NC BOT</title>
+        <title>Nigripes BOT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="NC AI BOT" name="description" />
         <meta content="NC AI BOT" name="author" />
@@ -48,41 +48,73 @@
                             </div>
                         </div>
 
+                        <!-- 警告訊息-->
+                        @if( Session::has('alert-danger') | Session::has('alert-warning') | Session::has('alert-success') | Session::has('alert-info')  )
+                        <div class="row">
+                            <div class="col-md-12 my-2">
+                                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                                @if(Session::has('alert-' . $msg))
+                                <div class="alert alert-{{ $msg }} alert-dismissible bg-{{ $msg }} text-white border-0 fade show" role="alert">
+                                    {{ Session::get('alert-' . $msg) }}
+                                </div>
+                                @endif
+                                @endforeach
+                                @if( $errors->any() && $errors->first() != "")
+                                <div class="alert alert-danger alert-dismissible bg-info text-white border-0 fade show" role="alert">
+                                {!! $errors->first() !!}
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endif<!-- 警告訊息-->
+
                         <!-- title-->
                         <h4 class="mt-0">登入</h4>
 
                         <!-- form -->
                         <form method="POST" action="{{ route('login') }}">
+                            @csrf
                             <div class="mb-3">
-                                <label for="emailaddress" class="form-label">Email</label>
-                                <input class="form-control" type="email" id="emailaddress" required="" placeholder="請輸入email" required autofocus>
+                                <label for="email" class="form-label">Email</label>
+                                <input class="form-control" type="email" id="email" name="email" required="" placeholder="請輸入email" required autofocus>
+
+                                @if( $errors->has('email') )
+								<span class="help-block" style="color: red;">
+								<strong>請確認帳號是否有誤</strong>
+								</span>
+								@endif
+
                             </div>
                             <div class="mb-3">
                                 <a href="{{ route('password.request') }}" class="text-muted float-end"><small>忘記密碼?</small></a>
                                 <label for="password" class="form-label">密碼</label>
                                 <div class="input-group input-group-merge">
-                                    <input type="password" id="password" class="form-control" placeholder="請輸入密碼" autocomplete="current-password">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="請輸入密碼" autocomplete="current-password">
                                     <div class="input-group-text" data-password="false">
-                                        <span class="password-eye"></span>
+                                    <span class="password-eye"></span>
+
+                                    @if( $errors->has('password') )
+                                    <span class="help-block" style="color: red;">
+                                    <strong>請確認密碼是否有誤</strong>
+                                    </span>
+                                    @endif
+
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="mb-3">
-                                <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="checkbox-signin">
-                                    <label class="form-check-label" for="checkbox-signin">記住我</label>
-                                </div>
+
                             </div>
                             <div class="text-center d-grid">
-                                <button class="btn btn-primary" type="submit">登入</button>
+                                <button class="btn btn-blue waves-effect waves-light" type="submit">登入</button>
                             </div>
                         </form>
                         <!-- end form-->
 
                         <!-- Footer-->
                         <footer class="footer footer-alt">
-                            <p class="text-muted"><a href="{{ route('register') }}" class="text-muted ms-1"><b>註冊帳號</b></a></p>
+                            <p class="text-muted"><a href="{{ route('register') }}" class="ms-1"><b>註冊帳號</b></a></p>
                         </footer>
 
                     </div> <!-- end .card-body -->

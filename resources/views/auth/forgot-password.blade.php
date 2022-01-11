@@ -15,9 +15,6 @@
 		<link href="{{ asset('assets/css/config/default/bootstrap.css') }}" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
 		<link href="{{ asset('assets/css/config/default/app.css') }}" rel="stylesheet" type="text/css" id="app-default-stylesheet" />
 
-		<link href="{{ asset('assets/css/config/default/bootstrap-dark.css') }}" rel="stylesheet" type="text/css" id="bs-dark-stylesheet" />
-		<link href="{{ asset('assets/css/config/default/app-dark.css') }}" rel="stylesheet" type="text/css" id="app-dark-stylesheet" />
-
 		<!-- icons -->
 		<link href="{{ asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
 
@@ -59,7 +56,7 @@
                             </div>
 
                             <div class="text-center d-grid">
-                                <button class="btn btn-primary waves-effect waves-light" type="submit"> 發送重設密碼信件 </button>
+                                <button class="btn btn-blue waves-effect waves-light" type="submit"> 發送重設密碼信件 </button>
                             </div>
 
                         </form>

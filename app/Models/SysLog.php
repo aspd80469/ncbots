@@ -11,4 +11,15 @@ class SysLog extends Authenticatable
     ];
 
 
+    //返回
+    public function getUser()
+    {
+        return $this->belongsTo(User::class, 'userid', 'id');
+    }
+
+    // public function getMybot()
+    // {
+    //     return $this->belongsTo(MyBot::class, 'myBotId', 'id');
+    // }
+
 }

@@ -19,8 +19,6 @@ class ManagerController extends Controller
     {
 
         //[主頁]
-
-        //搜尋條件
         $managers =  Manager::orderBy('created_at', 'DESC')->paginate(20);
 
         return view('mge/mge_managers', [
@@ -84,6 +82,11 @@ class ManagerController extends Controller
 
         $manager = Manager::findOrFail($id);
         $manager->account = htmlspecialchars($request->input('account'), ENT_QUOTES);
+
+        if( htmlspecialchars($request->input('password'), ENT_QUOTES) !="" ){
+            $manager->password = Hash::make(htmlspecialchars($request->input('password'), ENT_QUOTES));
+        }
+
         
         if ($manager->save()) {
             Session::flash('alert-success', '管理帳號更新成功');
@@ -100,11 +103,11 @@ class ManagerController extends Controller
         $manager = Manager::findOrFail($id);
 
         if ( $manager->id == 1) {
-            Session::flash('alert-danger', '你不能刪除系統管理帳號 ' . $manager->name . ':' . $manager->account);
+            Session::flash('alert-danger', '你不能刪除系統管理帳號：' . $manager->name . ':' . $manager->account);
         }else{
 
             //刪除帳號
-            Session::flash('alert-danger', '已成功刪除管理帳號 ' . $manager->name . ':' . $manager->account);
+            Session::flash('alert-danger', '已成功刪除管理帳號：' . $manager->name . ':' . $manager->account);
             Manager::destroy($id);
         }
 

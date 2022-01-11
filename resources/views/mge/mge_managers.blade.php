@@ -34,10 +34,11 @@
                             @foreach( $managers as $manager )
                             <tr>
                                 <td>
-                                  {{ $manager->account }}
+                                    <a href="{{ url('mge/managers/' . $manager->id )}}" class="font-weight-bold">
+                                    {{ $manager->account }}
+                                    </a>
                                 </td>
                                 <td>
-                                    <button type="submit" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url("mge/managers/" . $manager->id )}}'">編輯</button>
                                     @if( $manager->id != 1 ) 
                                     <button type="submit" class="btn btn-danger waves-effect waves-light" onclick="window.location='{{ url("mge/managers/delete/" . $manager->id  )}}'">刪除</button>
                                     @endif
