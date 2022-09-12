@@ -29,6 +29,10 @@
                                 <input type="text" class="form-control" id="s_email" name="s_email" value="{{ old('s_email') }}" placeholder="">
                             </div>
                             <div class="col-xl-2 col-md-3">
+                                <label for="s_name" class="mr-2">姓名</label>
+                                <input type="text" class="form-control" id="s_name" name="s_name" value="{{ old('s_name') }}" placeholder="">
+                            </div>
+                            <div class="col-xl-2 col-md-3">
                                 <label for="status-select" class="mr-2">備註</label>
                                 <input type="text" class="form-control"  id="s_notice" name="s_notice" value="{{ old('s_notice') }}">
                             </div>

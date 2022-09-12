@@ -101,12 +101,36 @@
 							
 							@if( $errors->has('tgId') )
                                 <span class="help-block" style="color: red;">
-                                <strong>必填，最大長度為20字元</strong>
+                                <strong>選填，最大長度為20字元</strong>
                                 </span>
 							@endif
 					
                         </div>
-						
+
+                        <div class="mb-3">
+                            <label for="tgBotToken" class="form-label">Telegram BotToken</label>
+                            <input type="text" id="tgBotToken" name="tgBotToken" class="form-control" maxlength="20" placeholder="請輸入Telegram Bot Token" value="@if( !is_null($user) ){{ $user->tgBotToken }}@endif">
+							
+							@if( $errors->has('tgBotToken') )
+                                <span class="help-block" style="color: red;">
+                                <strong>選填，最大長度為20字元</strong>
+                                </span>
+							@endif
+					
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tgChatId" class="form-label">Telegram ChatId</label>
+                            <input type="text" id="tgChatId" name="tgChatId" class="form-control" maxlength="20" placeholder="請輸入Telegram Chat ID" value="@if( !is_null($user) ){{ $user->tgChatId }}@endif">
+							
+							@if( $errors->has('tgChatId') )
+                                <span class="help-block" style="color: red;">
+                                <strong>選填，最大長度為20字元</strong>
+                                </span>
+							@endif
+					
+                        </div>
+
 						<div class="mb-3">
                             <label for="status" class="form-label">狀態</label>
 							<select class="form-control" name="status">

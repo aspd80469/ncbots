@@ -98,6 +98,8 @@ class UserController extends Controller
         $user->password = Hash::make(htmlspecialchars($request->input('password'), ENT_QUOTES));
         $user->name = htmlspecialchars($request->input('name'), ENT_QUOTES);
         $user->tgId = htmlspecialchars($request->input('tgId'), ENT_QUOTES);
+        $user->tgBotToken = htmlspecialchars($request->input('tgBotToken'), ENT_QUOTES);
+        $user->	tgChatId = htmlspecialchars($request->input('tgChatId'), ENT_QUOTES);
         $user->status = htmlspecialchars($request->input('status'), ENT_QUOTES);
         $user->notice = htmlspecialchars($request->input('notice'), ENT_QUOTES);
         
@@ -173,6 +175,8 @@ class UserController extends Controller
 
         $user->name = htmlspecialchars($request->input('name'), ENT_QUOTES);
         $user->tgId = htmlspecialchars($request->input('tgId'), ENT_QUOTES);
+        $user->tgBotToken = htmlspecialchars($request->input('tgBotToken'), ENT_QUOTES);
+        $user->	tgChatId = htmlspecialchars($request->input('tgChatId'), ENT_QUOTES);
         $user->status = htmlspecialchars($request->input('status'), ENT_QUOTES);
         $user->notice = htmlspecialchars($request->input('notice'), ENT_QUOTES);
 
@@ -228,12 +232,17 @@ class UserController extends Controller
         $users = User::query();
 
         $s_email = htmlspecialchars($request->input('s_email'), ENT_QUOTES);
+        $s_name = htmlspecialchars($request->input('s_name'), ENT_QUOTES);
         $s_notice = htmlspecialchars($request->input('s_notice'), ENT_QUOTES);
 
         $request->flash();
         
         if ($s_email != '') {
             $users = $users->where('email', 'LIKE', '%' . $s_email . '%');
+        }
+
+        if ($s_name != '') {
+            $users = $users->where('name', 'LIKE', '%' . $s_name . '%');
         }
 
         if ($s_notice != '') {

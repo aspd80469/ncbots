@@ -75,7 +75,7 @@
 							@endif
 
                             <span class="help-block">
-                            <strong>限制策略ID將讓非設定的策略無法使用訊號，請前後以半形分號(;)各一分隔</strong>
+                            <strong>限制策略ID將讓非設定的策略無法使用訊號，請前後以半形分號(;)分隔</strong>
                             </span>
 
                         </div>
@@ -106,7 +106,7 @@
 							@endif
 
                             <span class="help-block">
-                            <strong>設定停用即使尚未過有效期限也無法收到訊號</strong>
+                            <strong>設定【停用】即使尚未過有效期限也無法收到訊號</strong>
                             </span>
 
                         </div>

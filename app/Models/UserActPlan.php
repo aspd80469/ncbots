@@ -16,4 +16,10 @@ class UserActPlan extends Authenticatable
         return $this->belongsTo(UserPlan::class, 'planID', 'id');
     }
 
+        //返回
+        public function getUser()
+        {
+            return $this->belongsTo(User::class, 'planID', 'id');
+        }
+
 }

@@ -71,6 +71,9 @@ class BotStgyController extends Controller
         $botStgys->stgyName = htmlspecialchars($request->input('stgyName'), ENT_QUOTES);
         $botStgys->stgyMapfun = htmlspecialchars($request->input('stgyMapfun'), ENT_QUOTES);
         $botStgys->notice = htmlspecialchars($request->input('notice'), ENT_QUOTES);
+        $botStgys->maxDCAqty = htmlspecialchars($request->input('maxDCAqty'), ENT_QUOTES);
+        $botStgys->allowSymbol = htmlspecialchars($request->input('allowSymbol'), ENT_QUOTES);
+        $botStgys->fixedBuyAmt = htmlspecialchars($request->input('fixedBuyAmt'), ENT_QUOTES);
         $botStgys->reBuy1h = htmlspecialchars($request->input('reBuy1h'), ENT_QUOTES);
         $botStgys->reSell1h = htmlspecialchars($request->input('reSell1h'), ENT_QUOTES);
         $botStgys->reBuy2h = htmlspecialchars($request->input('reBuy2h'), ENT_QUOTES);
@@ -83,7 +86,7 @@ class BotStgyController extends Controller
         $botStgys->reSell12h = htmlspecialchars($request->input('reSell12h'), ENT_QUOTES);
         $botStgys->reBuyDay = htmlspecialchars($request->input('reBuyDay'), ENT_QUOTES);
         $botStgys->reSellDay = htmlspecialchars($request->input('reSellDay'), ENT_QUOTES);
-        $botStgys->maxDCAqty = htmlspecialchars($request->input('maxDCAqty'), ENT_QUOTES);
+        
         $botStgys->status = htmlspecialchars($request->input('sstatus'), ENT_QUOTES);
 
         if ($botStgys->save()) {
@@ -140,6 +143,9 @@ class BotStgyController extends Controller
         $botStgys->stgyName = htmlspecialchars($request->input('stgyName'), ENT_QUOTES);
         $botStgys->stgyMapfun = htmlspecialchars($request->input('stgyMapfun'), ENT_QUOTES);
         $botStgys->notice = htmlspecialchars($request->input('notice'), ENT_QUOTES);
+        $botStgys->maxDCAqty = htmlspecialchars($request->input('maxDCAqty'), ENT_QUOTES);
+        $botStgys->allowSymbol = htmlspecialchars($request->input('allowSymbol'), ENT_QUOTES);
+        $botStgys->fixedBuyAmt = htmlspecialchars($request->input('fixedBuyAmt'), ENT_QUOTES);
         $botStgys->reBuy1h = htmlspecialchars($request->input('reBuy1h'), ENT_QUOTES);
         $botStgys->reSell1h = htmlspecialchars($request->input('reSell1h'), ENT_QUOTES);
         $botStgys->reBuy2h = htmlspecialchars($request->input('reBuy2h'), ENT_QUOTES);
@@ -152,8 +158,6 @@ class BotStgyController extends Controller
         $botStgys->reSell12h = htmlspecialchars($request->input('reSell12h'), ENT_QUOTES);
         $botStgys->reBuyDay = htmlspecialchars($request->input('reBuyDay'), ENT_QUOTES);
         $botStgys->reSellDay = htmlspecialchars($request->input('reSellDay'), ENT_QUOTES);
-        $botStgys->maxDCAqty = htmlspecialchars($request->input('maxDCAqty'), ENT_QUOTES);
-        $botStgys->maxDCAqty = htmlspecialchars($request->input('maxDCAqty'), ENT_QUOTES);
         $botStgys->status = htmlspecialchars($request->input('sstatus'), ENT_QUOTES);
 
         if ($botStgys->save()) {

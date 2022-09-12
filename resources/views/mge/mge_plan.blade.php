@@ -12,7 +12,6 @@
             <h4 class="page-title">
                     會員方案 &nbsp; &nbsp;
                     <button type="button" class="btn btn-blue waves-effect waves-light" onclick="window.location='{{ url('mge/plans/0') }}'"><i class="fas fa-plus"></i> 新增會員方案</button>
-                  
             </h4>
         </div>
     </div>
@@ -23,12 +22,26 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
+                <div class="row g-13">
+                    <div class="col-lg-12">
+                        <form class="row g-3" role="form" method="POST" enctype="multipart/form-data" action="{{ url('mge/orders') }}">
+                            @csrf
+
+                        </form>                            
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="text-lg-right">
+
+                        </div>
+                    </div><!-- end col-->
+                </div>
 
                 <div class="table-responsive">
                     <table class="table table-centered mb-0">
                         <thead class="thead-light">
                             <tr>
                                 <th>#</th>
+                                <th>會員</th>
                                 <th>狀態</th>
 								<th>方案</th>
                                 <th>生效日期</th>
@@ -47,6 +60,11 @@
                                 <td>
                                     <a href="{{ url('mge/plans/' . $userPlanRecord->id )}}" class="font-weight-bold">
                                         #{{ $userPlanRecord->id }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ url('mge/plans/' . $userPlanRecord->id )}}" class="font-weight-bold">
+                                        {{ $userPlanRecord->getUser->email }}
                                     </a>
                                 </td>
                                 <td>

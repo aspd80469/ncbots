@@ -81,6 +81,34 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="allowSymbol" class="col-3 col-form-label">允許操作幣種</label>
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="allowSymbol" name="allowSymbol" value="@if(!is_null($botStgy)){{ $botStgy->allowSymbol }}@endif" >
+                                                            
+                                @error('allowSymbol')
+                                <span role="alert" style="color: red;">
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                                
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fixedBuyAmt" class="col-3 col-form-label">預設固定買入金額</label>
+                            <div class="col-12">
+                                <input type="text" class="form-control" id="fixedBuyAmt" name="fixedBuyAmt" value="@if(!is_null($botStgy)){{ $botStgy->fixedBuyAmt }}@endif" >
+                                                            
+                                @error('fixedBuyAmt')
+                                <span role="alert" style="color: red;">
+                                    {{ $message }}
+                                </span>
+                                @enderror
+                                
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="reBuy1h" class="col-3 col-form-label">rBuy1h%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reBuy1h" name="reBuy1h" value="@if(!is_null($botStgy)){{ $botStgy->reBuy1h }}@endif" required >
@@ -95,7 +123,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="reSell1h" class="col-3 col-form-label">reSell1h%</label>
+                            <label for="reSell1h" class="col-3 col-form-label">rSell1h%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reSell1h" name="reSell1h" value="@if(!is_null($botStgy)){{ $botStgy->reSell1h }}@endif" required >
                                                             
@@ -123,7 +151,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="reSell2h" class="col-3 col-form-label">reSell2h%</label>
+                            <label for="reSell2h" class="col-3 col-form-label">rSell2h%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reSell2h" name="reSell2h" value="@if(!is_null($botStgy)){{ $botStgy->reSell2h }}@endif" required >
                                                             
@@ -151,7 +179,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="reSell4h" class="col-3 col-form-label">reSell4h%</label>
+                            <label for="reSell4h" class="col-3 col-form-label">rSell4h%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reSell4h" name="reSell4h" value="@if(!is_null($botStgy)){{ $botStgy->reSell4h }}@endif" required >
                                                             
@@ -179,7 +207,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="reSell6h" class="col-3 col-form-label">reSell6h%</label>
+                            <label for="reSell6h" class="col-3 col-form-label">rSell6h%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reSell6h" name="reSell6h" value="@if(!is_null($botStgy)){{ $botStgy->reSell6h }}@endif" required >
                                                             
@@ -207,7 +235,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="reSell12h" class="col-3 col-form-label">reSell12h%</label>
+                            <label for="reSell12h" class="col-3 col-form-label">rSell12h%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reSell12h" name="reSell12h" value="@if(!is_null($botStgy)){{ $botStgy->reSell12h }}@endif" required >
                                                             
@@ -221,11 +249,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="rBuyDay" class="col-3 col-form-label">rBuyDay%</label>
+                            <label for="reBuyDay" class="col-3 col-form-label">rBuyDay%</label>
                             <div class="col-12">
-                                <input type="text" class="form-control" id="rBuyDay" name="rBuyDay" value="@if(!is_null($botStgy)){{ $botStgy->rBuyDay }}@endif" required >
+                                <input type="text" class="form-control" id="reBuyDay" name="reBuyDay" value="@if(!is_null($botStgy)){{ $botStgy->reBuyDay }}@endif" required >
                                                             
-                                @error('rBuyDay')
+                                @error('reBuyDay')
                                 <span role="alert" style="color: red;">
                                     {{ $message }}
                                 </span>
@@ -235,7 +263,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="reSellDay" class="col-3 col-form-label">reSellDay%</label>
+                            <label for="reSellDay" class="col-3 col-form-label">rSellDay%</label>
                             <div class="col-12">
                                 <input type="text" class="form-control" id="reSellDay" name="reSellDay" value="@if(!is_null($botStgy)){{ $botStgy->reSellDay }}@endif" required >
                                                             

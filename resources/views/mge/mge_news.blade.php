@@ -65,23 +65,23 @@
                             @foreach( $news as $nnews )
                             <tr>
                                 <td>
-                                    <a href="{{ url("/mge/news/" . $nnews->id )}}" class="text-body">
+                                    <a href="{{ url("/mge/news/" . $nnews->id )}}" class="font-weight-bold">
                                     #{{ $nnews->id }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url("/mge/news/" . $nnews->id )}}" class="text-body">
+                                    <a href="{{ url("/mge/news/" . $nnews->id )}}" class="font-weight-bold">
                                     {{ $nnews->title }}
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="{{ url("/mge/news/" . $nnews->id )}}" class="text-body">
+                                    <a href="{{ url("/mge/news/" . $nnews->id )}}" class="font-weight-bold">
                                         {{ $nnews->created_at }}
                                     </a>
                                 </td>
                                 <td>
                                     @if( $nnews->display == '0' )
-                                    是
+                                    <span class="badge bg-success font-16">是</span>
                                     @else
                                     否
                                     @endif

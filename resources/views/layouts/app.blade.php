@@ -4,7 +4,7 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>Nigripes BOT</title>
+        <title>NCat BOT</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="NC AI BOT" name="description" />
         <meta content="NC AI BOT" name="author" />
@@ -85,6 +85,7 @@
                     <li class="dropdown notification-list topbar-dropdown">
                         <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <span class="pro-user-name ms-1">
+                                選單
                                 {{-- @if(!Auth::guard('manager')->user())
                                 HI! {{ Auth::User()->email}} 
                                 @else
@@ -134,10 +135,10 @@
             
                     <a href="@if(!Auth::guard('manager')->user()){{ route('dashboard') }}@else{{ route('admin') }}@endif" class="logo logo-light text-center">
                         <span class="logo-sm logo-lg-text-light">
-                            NC BOTS
+                            NCat BOT
                         </span>
                         <span class="logo-lg logo-lg-text-light">
-                            NC BOTS
+                            NCat BOT
                         </span>
                     </a>
                 </div>
@@ -217,7 +218,9 @@
                         @endif
 
                         @if(Auth::guard('manager')->user())
-                        <li class="menu-title">管理選單</li>
+                        <li class="menu-title">
+                            <span> 管理選單 </span>
+                        </li>
 
                         <li>
                             <a href="{{ url('mge/users') }}">
@@ -246,7 +249,8 @@
                         <li>
                             <a href="{{ url('mge/userPlans') }}">
                                 <i class="fas fa-archive"></i>
-                                方案管理</a>
+                                <span> 方案管理 </span>
+                            </a>
                         </li>
 
                         <li>
@@ -260,50 +264,56 @@
                         <li>
                             <a href="{{ url('mge/botStgys') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                                策略管理
+                                <span> 策略管理 </span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ url('mge/news') }}">
                                 <i class="far fa-newspaper"></i>
-                                最新消息
+                                <span> 最新消息 </span>
                             </a>
                         </li>
 
                         <li>
                             <a href="{{ url('mge/sysSignals') }}">
                                 <i class="far fa-check-square"></i>
-                                訊號Token</a>
+                                <span> 訊號Token </span>
+                            </a>
                         </li>
 
                         <li>
                             <a href="{{ url('mge/binancePrice') }}">
                                 <i class="fas fa-coins"></i>
-                                幣安現貨報價</a>
+                                <span> 幣安現貨報價 </span>
+                            </a>
                         </li>
 
                         <li>
                             <a href="{{ url('mge/ftxPrice') }}">
                                 <i class="fas fa-comments-dollar"></i>
-                                FTX現貨報價</a>
+                                <span> FTX現貨報價 </span>
+                            </a>
                         </li>
 
                         <li>
                             <a href="{{ url('mge/sysSignalLogs') }}">
                                 <i class="far fa-chart-bar"></i>
-                                訊號紀錄</a>
+                                <span> 訊號紀錄 </span>
+                            </a>
                         </li>
 
                         <li>
                             <a href="{{ url('mge/sysLogs') }}">
                                 <i class="far fa-list-alt"></i>
-                                系統紀錄</a>
+                                <span> 系統紀錄 </span>
+                            </a>
                         </li>
 
                         <li>
                             <a href="#sidebarTickets" data-bs-toggle="collapse" class="" aria-expanded="false">
-                                <i class="fe-settings"></i>系統設定
+                                <i class="fe-settings"></i>
+                                <span> 系統設定 </span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="sidebarTickets" style="">

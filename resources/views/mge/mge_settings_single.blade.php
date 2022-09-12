@@ -66,9 +66,11 @@
 							</span>
 							@endif
 
+                            @if( is_null($setting))
                             <span class="help-block" style="color: red;">
-							<strong>如選擇為【是】，新增後無法透過後臺刪除</strong>
+							<strong>如選【是】，則新增後無法刪除</strong>
 							</span>
+                            @endif
 
                         </div>
 
